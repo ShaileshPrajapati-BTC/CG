@@ -6,9 +6,10 @@ import {
   Button
 } from 'native-base';
 
-import {View, ToastAndroid,StyleSheet} from 'react-native';
+import {View, AsyncStorage, ToastAndroid, StyleSheet} from 'react-native';
 import Header from './components/header.js';   
 import Camera from 'react-native-camera';
+import CONFIG from './config/config.js';
 
 export default class Qrcode extends Component {
 
@@ -16,10 +17,16 @@ export default class Qrcode extends Component {
     super(props);
 
     this.state = {
-      data: true
+      token: '',
+      data: true,
+      result: ''
     };
   }
 
+  componentWillMount () {
+    this._getToken();
+  }
+  
   componentDidMount(){
     setTimeout( () => {
       this.setState({data: false})
@@ -27,15 +34,51 @@ export default class Qrcode extends Component {
     
   }
 
-  _onBarCodeRead(result) {
+  async _getToken(){
+     AsyncStorage.getItem('token', (err, result) => {
+       token= JSON.parse(result)
+       if (result!=null){
+          this.setState({token: token});
+       }
+     });
+  }
+
+  async _scan_in_and_out_request(id){
+
+    let response = await fetch(CONFIG.BASE_URL+'qrcode/scan', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'access_token': this.state.token
+      },
+      body: JSON.stringify(
+      {
+        patient_id: id,
+      })
+    });
+
+    let result = await response.json();
+    console.log(result);
+    if (result.status){
+      AsyncStorage.setItem("scan_status", JSON.stringify(result.data.scan_status));
+      ToastAndroid.show(result.message+"true", ToastAndroid.SHORT,ToastAndroid.CENTER);
+    }
+    else{
+      ToastAndroid.show(result.message+"false", ToastAndroid.SHORT,ToastAndroid.CENTER);
+    }
+  }
+
+  
+  async _onBarCodeRead(result) {
       var $this = this;
       
       if (this.barCodeFlag) {
         this.barCodeFlag = false;
         setTimeout(function() {
-          ToastAndroid.show(result.data,ToastAndroid.SHORT,ToastAndroid.CENTER,);
+          $this._scan_in_and_out_request(result.data);
           $this.props.navigator.pop();
-        }, 500);
+        }, 200);
       }
     }
 
