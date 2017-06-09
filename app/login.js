@@ -8,7 +8,7 @@ import {
   Input,
   Text,
   Button,
-  Spinner
+  Spinner,Header,Body,Title,Icon
 } from 'native-base';
 
 import {
@@ -17,20 +17,13 @@ import {
   ToastAndroid,
   Platform,
   NativeAppEventEmitter,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  Image,View,Alert,Dimensions
 } from 'react-native';
 
-import BackgroundTimer from 'react-native-background-timer';
 import PushNotification from'react-native-push-notification';
 
 import CONFIG from './config/config.js';
-
-const EventEmitter = Platform.select({
-  ios: () => NativeAppEventEmitter,
-  android: () => DeviceEventEmitter,
-})();
-
-
 
 export default class Login extends Component {
 
@@ -40,31 +33,15 @@ export default class Login extends Component {
     this.state = {
       mobile: '',
       password: '',
-      login: true
+      login: true,
+      disabled: false
     };
-  }
-  componentDidMount(){
-    this.checkLogin();
-    // console.log('toke');
-    // const intervalId = BackgroundTimer.setInterval(() => {
-    //   console.log('tic');
-    //   }, 200);
-  }
-  
-  async checkLogin(){
-    AsyncStorage.getItem('token', (err, result) => {
-      current_user= JSON.parse(result)
-      if (result!=null){
-        this._navigate('Scan','In');
-      }
-      else
-      {
-        this.setState({login: false});
-      }
-    });
   }
 
   async login(){
+    var $this = this;
+    this.setState({disabled: true})
+
     let response = await fetch(CONFIG.BASE_URL+'cargiver/login', {
       method: 'POST',
       headers: {
@@ -76,22 +53,30 @@ export default class Login extends Component {
         mobile: this.state.mobile,
         password: this.state.password,
       })
+    }).catch(function(error) {
+      Alert.alert("Error", "Something went wrong please try again later!!");
+      $this.setState({disabled: false});
     });
-
-    let res = await response.json();
-    console.log(res);
-    if (res.status)
-    {
-      AsyncStorage.setItem('token', JSON.stringify(res.data.token));
-      AsyncStorage.setItem('name', JSON.stringify(res.data.fullname));
-      ToastAndroid.show(res.message,ToastAndroid.SHORT,ToastAndroid.CENTER,);
-      PushNotification.localNotification ({
-        message: "Dont Forget to enable Geo location.."
-      });
-      this._navigate('Scan','In');
-    }
-    else{
-      ToastAndroid.show(res.message,ToastAndroid.SHORT,ToastAndroid.CENTER,);
+    try {
+      let res = await response.json();
+      console.log(res);
+      if (res.status)
+      {
+        AsyncStorage.setItem('token', JSON.stringify(res.data.token));
+        AsyncStorage.setItem('name', JSON.stringify(res.data.fullname));
+        ToastAndroid.show(res.message,ToastAndroid.SHORT,ToastAndroid.CENTER,);
+        PushNotification.localNotification ({
+          message: "Dont Forget to enable Geo location.."
+        });
+        this._navigate('Scan','In');
+      }
+      else{
+        this.setState({disabled: false});
+        ToastAndroid.show(res.message,ToastAndroid.SHORT,ToastAndroid.CENTER,);
+      }
+    } catch(error) {
+      Alert.alert("Error", "Something went wrong please try again later!!");
+      console.log(error);
     }
   }
 
@@ -104,27 +89,31 @@ export default class Login extends Component {
   render() {
     return (
       <Container >
-        {(this.state.login)? <Content style={{top:200}}><Spinner color='#2196F3'/></Content>:
           <Content>
             <StatusBar
               backgroundColor="#4527a0"
               barStyle="light-content"
             />
-            <Form style={{ alignSelf: 'center', marginTop: 180, marginBottom: 20,width:300 }}>
-              <Item floatingLabel>
-                <Label>Phone number</Label>
-                <Input keyboardType="numeric" autoFocus = {true} onChangeText={(text) => {this.setState({mobile: text})}}/>
+             <Header>
+                <Body>
+                  <Title>Login</Title>
+                </Body>
+            </Header>
+            <Image square  style={{alignSelf: 'center', marginTop:40}} source={require('./images/Logo.png')}  />
+            <Form style={{ alignSelf: 'center',marginTop:20, width:300 }}>
+              <Item >
+                <Icon active name='ios-call' />
+                <Input placeholder='Phone number' keyboardType="numeric" autoFocus = {true} onChangeText={(text) => {this.setState({mobile: text})}}/>
               </Item>
-              <Item floatingLabel>
-                <Label>Password</Label>
-                <Input secureTextEntry={true} onChangeText={(text) => {this.setState({password: text})}}/>
+              <Item>
+                <Icon active name='ios-lock'/>
+                <Input placeholder='Password' secureTextEntry={true} onChangeText={(text) => {this.setState({password: text})}}/>
               </Item>
-                <Button style={{ backgroundColor:'#4527a0', alignSelf: 'center', marginTop: 20, marginBottom: 20,width:100 }} onPress={ () => this.login() }>
-                  <Text style={{ marginLeft: 12}}>Login</Text>
+                <Button disabled={this.state.disabled} style={{backgroundColor: '#4527a0', alignSelf: 'center', marginTop: 25, marginBottom: 20,width:100 }} onPress={ () => this.login() }>
+                  {(this.state.disabled)? <Spinner color='#ffffff' style={{marginLeft: 15}}/> : <Text style={{ marginLeft: 12}}>Login</Text>}
                 </Button>
             </Form>
           </Content>
-        }
       </Container>
     );
   }

@@ -15,7 +15,8 @@ export default class Scan extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: ''
+      name: '',
+      scan_status: ''
     }; 
   }
 
@@ -35,7 +36,7 @@ export default class Scan extends Component {
   }
 
   _logout(){
-    AsyncStorage.multiRemove(['token','scan_status', 'clock_status', 'appointment_id', 'client_id'], (err, result) => {
+    AsyncStorage.multiRemove(['token','scan_status', 'clock_status'], (err, result) => {
       this._navigate('Splash','');
     });
   }
@@ -53,17 +54,16 @@ export default class Scan extends Component {
     return (
         <Header>
           <Left>
-            <Thumbnail source={require('../images/user1.jpg')} />
+            <Button transparent onPress={ () => this.props.navigator.pop()} style={{height: 60}}>
+              <Icon name="arrow-back"/>
+                <Thumbnail style={{marginLeft: 5}} source={require('../images/user1.jpg')} />                    
+            </Button>
           </Left>
           <Body style={{left: this.props.emergency_icon ? 30 : 0}}>
             <Title >{this.state.name}</Title>
             <Subtitle style={{color: 'white',marginLeft: 5}}>{this.state.scan_status}</Subtitle>
           </Body>
-          <Right>
-            <Text transparent onPress={ () => this._logout()} style={{color: 'white'}}>
-              Logout
-            </Text>
-          </Right>          
+          <Right/>    
         </Header>
     );
   }
