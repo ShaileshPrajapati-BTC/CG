@@ -113,14 +113,14 @@ export default class Emergency extends Component {
           <Form style={{ marginTop: 70}}>
             <Item stackedLabel>
               <Label>Do you have any reimbursable Milage to enter?</Label>
-              <Input autoFocus = {true} onChangeText={(text) => {this.setState({extra_milage: text})}}/>
+              <Input autoFocus = {true} onChangeText={(text) => {this.setState({extra_milage: text})}} multiline = {true} numberOfLines = {4}/>
             </Item>
             <Item stackedLabel>
               <Label> Any injuries to Client or to yourself?</Label>
               <Input onChangeText={(text) => {this.setState({injury_status: text})}}/>
             </Item>
-              <Button style={{ backgroundColor:'#4527a0', alignSelf: 'center', marginTop: 20, marginBottom: 20 }} onPress={ () => this._sendData() }>
-                {(this.state.disabled)? <Spinner color='#ffffff' /> : <Text> Submit</Text>}
+              <Button style={{ backgroundColor:'#4527a0', alignSelf: 'center', marginTop: 20, marginBottom: 20,width: 100 }} onPress={ () => this._sendData() }>
+                {(this.state.disabled)? <Spinner color='#ffffff' style={{marginLeft: 15}}/> : <Text style={{ marginLeft: 10}}>Submit</Text>}
               </Button>
           </Form>
         </Content>

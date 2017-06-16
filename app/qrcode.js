@@ -85,8 +85,9 @@ export default class Qrcode extends Component {
         this.barCodeFlag = false;
         setTimeout(function() {
           $this._scan_in_and_out_request(result.data);
-          // $this.props.type._setStatus();
-          $this.props.navigator.pop();
+          routes = $this.props.navigator.getCurrentRoutes();
+          routeToGo = routes.find( route => route.name == 'Scan');
+          $this.props.navigator.popToRoute(routeToGo);
         }, 200);
       }
     }

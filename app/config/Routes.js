@@ -17,9 +17,9 @@ exports.renderScene = function(route, navigator) {
   if(route.name == 'Scan') {
     return <Scan navigator={navigator} {...route.passProps}  />
   }
-  if(route.name == 'Emergency') {
-    return <Emergency navigator={navigator} {...route.passProps}  />
-  }
+  // if(route.name == 'Emergency') {
+  //   return <Emergency navigator={navigator} {...route.passProps}  />
+  // }
   if(route.name == 'Splash') {
     return <Splash navigator={navigator} {...route.passProps}  />
   }

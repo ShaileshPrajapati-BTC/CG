@@ -10,7 +10,6 @@ import {
 
 import {Image, AsyncStorage, Alert, Platform, DeviceEventEmitter,NativeAppEventEmitter,ToastAndroid} from 'react-native';       
 import PushNotification from'react-native-push-notification';
-import ActionButton from 'react-native-action-button';
 import geolib from 'geolib';
 import BackgroundTimer from 'react-native-background-timer';
 
@@ -105,7 +104,7 @@ export default class Scan extends Component {
   }
 
   componentDidMount() {
-    
+    console.log(this.props.navigator.getCurrentRoutes())
   }
 
   componentDidUnount() {
@@ -114,8 +113,7 @@ export default class Scan extends Component {
 
   _checkTaskStatus(){
     if (this.state.in_out_status == "Out"){
-      ToastAndroid.show("Befor clock out please complete Task list!!", ToastAndroid.LONG,ToastAndroid.CENTER);
-      this._navigate('Task','');
+      this._navigate('Task',this);
     }
     else{
       this._navigate('Qrcode', this);
@@ -133,7 +131,7 @@ export default class Scan extends Component {
   
   _logout(){
     BackgroundTimer.stop();
-    AsyncStorage.multiRemove(['token','scan_status', 'clock_status', 'appointment_id', 'client_id', 'location'], (err, result) => {
+    AsyncStorage.multiRemove(['token','scan_status', 'clock_status', 'appointment_id', 'client_id', 'location','in_out_status'], (err, result) => {
       this._navigate('Splash','');
     });
   }
@@ -150,9 +148,12 @@ export default class Scan extends Component {
             <Subtitle style={{color: 'white',marginLeft: 5}}>{this.state.scan_status}</Subtitle>
           </Body>
           <Right>
-            <Text transparent onPress={ () => this._logout()} style={{color: 'white'}}>
-              Logout
-            </Text>
+            <Button transparent onPress={ () => this._logout()}>
+              <Text transparent style={{color: 'white'}}>
+                Logout
+              </Text>             
+            </Button>
+
           </Right>          
         </Header>
 
@@ -162,7 +163,6 @@ export default class Scan extends Component {
             <Text style={{ alignSelf: 'center'}}>{this.state.clock}</Text>
           </Button>
         </Content>
-        <ActionButton buttonColor="#4527a0" onPress={ () => this._navigate('Emergency','')} icon ={<Icon name="md-help" style={{color: 'white'}}/>}/>          
       </Container>
     );
   }

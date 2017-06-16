@@ -36,7 +36,7 @@ export default class Scan extends Component {
   }
 
   _logout(){
-    AsyncStorage.multiRemove(['token','scan_status', 'clock_status'], (err, result) => {
+    AsyncStorage.multiRemove(['token','scan_status', 'clock_status','in_out_status'], (err, result) => {
       this._navigate('Splash','');
     });
   }
@@ -50,11 +50,16 @@ export default class Scan extends Component {
     })
   }
 
+  _back_press(){
+    routes = this.props.navigator.getCurrentRoutes();
+    routeToGo = routes.find( route => route.name == 'Scan');
+    this.props.navigator.popToRoute(routeToGo);
+  }
   render() {
     return (
         <Header>
           <Left>
-            <Button transparent onPress={ () => this.props.navigator.pop()} style={{height: 60}}>
+            <Button transparent onPress={ () => this._back_press()} style={{height: 60}}>
               <Icon name="arrow-back"/>
                 <Thumbnail style={{marginLeft: 5}} source={require('../images/user1.jpg')} />                    
             </Button>
