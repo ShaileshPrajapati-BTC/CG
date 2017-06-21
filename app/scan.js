@@ -5,10 +5,10 @@ import {
   Text,
   Button,Icon,Badge,
   Header,Left,Body,Title,Right,Subtitle,
-  Thumbnail
+  Thumbnail,Spinner
 } from 'native-base';
 
-import {Image, AsyncStorage, Alert, Platform, DeviceEventEmitter,NativeAppEventEmitter,ToastAndroid} from 'react-native';       
+import {Image, AsyncStorage,StyleSheet, Alert, Platform, DeviceEventEmitter,NativeAppEventEmitter,ToastAndroid,StatusBar} from 'react-native';       
 import PushNotification from'react-native-push-notification';
 import geolib from 'geolib';
 import BackgroundTimer from 'react-native-background-timer';
@@ -138,8 +138,9 @@ export default class Scan extends Component {
   
   render() {
     return (
-      <Container>
-        <Header>
+    <Image style={styles.container} ref={'backgroundImage'} source={{uri: 'http://pre12.deviantart.net/54fe/th/pre/i/2014/303/5/5/gradient_blur_abstract_hd_wallpaper_1920x1200_4426_by_satriohasmoro-d84o6ls.jpg'}}>
+      <Container >
+        <Header style={{ backgroundColor:'#de6262'}}>
           <Left>
             <Thumbnail source={require('./images/user1.jpg')} />
           </Left>
@@ -157,13 +158,41 @@ export default class Scan extends Component {
           </Right>          
         </Header>
 
-        <Content padder>
-          <Image square  style={{ alignSelf: 'center',height:200,width:200, marginTop: 60 }} source={require('./images/qrcode.jpg')}  />
-          <Button  onPress={()=> this._checkTaskStatus()} style={{ backgroundColor:'#4527a0', alignSelf: 'center', marginTop: 30, marginBottom: 20 }}>
+        <Content contentContainerStyle={{flex: 1,justifyContent: 'center',alignItems: 'center'}}>
+          <StatusBar
+            backgroundColor="#de6262"
+            barStyle="light-content"
+          />
+          <Button  onPress={()=> this._checkTaskStatus()} style={{justifyContent:'center', backgroundColor:'#de6262', alignSelf: 'center', marginTop: 30, marginBottom: 20,width:100,height:100, borderRadius:50}}>
             <Text style={{ alignSelf: 'center'}}>{this.state.clock}</Text>
           </Button>
         </Content>
       </Container>
+    </Image>
     );
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    resizeMode: 'cover',
+    width: null,
+    height: null,
+  },
+  welcome: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    margin: 10,
+    color: '#FFFFFF',
+  },
+  blurView: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    bottom: 0,
+    right: 0
+  }
+});

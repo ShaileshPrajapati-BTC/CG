@@ -6,7 +6,7 @@ import {
   Button,Spinner
 } from 'native-base';
 
-import {Image, StatusBar, Dimensions, AsyncStorage} from 'react-native';       
+import {Image, StatusBar, Dimensions, AsyncStorage, StyleSheet} from 'react-native';       
 import Header from './components/header.js';
 
 export default class Splash extends Component {
@@ -45,13 +45,39 @@ export default class Splash extends Component {
 
   render() {
     return (
-      <Container>
-          <Content >
-            <StatusBar backgroundColor="#4527a0" barStyle="light-content"/>
-            <Image square  style={{alignSelf: 'center', marginTop: Dimensions.get("window").height/2-120 }} source={require('./images/Logo.png')}  />
-            <Spinner color='#2196F3'/>            
-        </Content>
-      </Container>
+      <Image style={styles.container} ref={'backgroundImage'} source={{uri: 'http://pre12.deviantart.net/54fe/th/pre/i/2014/303/5/5/gradient_blur_abstract_hd_wallpaper_1920x1200_4426_by_satriohasmoro-d84o6ls.jpg'}}>
+        <Container>
+            <Content >
+              <StatusBar backgroundColor="#de6262" barStyle="light-content"/>
+              <Image square  style={{alignSelf: 'center', marginTop: Dimensions.get("window").height/2-120 }} source={require('./images/Logo.png')}  />
+              <Spinner color='#de6262'/>            
+          </Content>
+        </Container>
+      </Image>
     );
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    resizeMode: 'cover',
+    width: null,
+    height: null,
+  },
+  welcome: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    margin: 10,
+    color: '#FFFFFF',
+  },
+  blurView: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    bottom: 0,
+    right: 0
+  }
+});

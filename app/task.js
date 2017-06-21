@@ -191,7 +191,7 @@ export default class Task extends Component {
           task.push(
             <Card style={{borderBottomWidth:5, borderBottomColor: 'red'}} bordered={true}>
               <CardItem header >
-                <Text style={{color: '#512DA8', fontSize: 20, fontWeight: "bold"}}>{key}</Text>
+                <Text style={{color: '#de6262', fontSize: 20, fontWeight: "bold"}}>{key}</Text>
               </CardItem>
               {sub}
             </Card>
@@ -202,7 +202,7 @@ export default class Task extends Component {
       task.push(
           <Card>
             <CardItem header >
-              <Text style={{color: '#512DA8', fontSize: 20, fontWeight: "bold"}}>Extra Activity</Text>
+              <Text style={{color: '#de6262', fontSize: 20, fontWeight: "bold"}}>Extra Activity</Text>
             </CardItem>
             <CardItem>
               <Form>
@@ -223,14 +223,14 @@ export default class Task extends Component {
         <Header navigator={this.props.navigator} emergency_icon={true}/>
         {(this.state.loading)? <Spinner color='#2196F3' style={{marginLeft: 15}}/> : 
           <Content >
-            <StatusBar backgroundColor="#4527a0" barStyle="light-content"/>
+            <StatusBar backgroundColor="#de6262" barStyle="light-content"/>
             {task}
 
           </Content>
         }
         {(!this.state.loading)? 
-          <Button style={{backgroundColor: '#4527a0', alignSelf: 'center', marginTop: 10, marginBottom: 10, width:100 }} onPress={ () => this._confirmation_for_submit() }>
-            {(this.state.disabled)? <Spinner color='#ffffff' style={{marginLeft: 15}}/> : <Text style={{ marginLeft: 8}}>Submit</Text>}
+          <Button style={{justifyContent:'center', backgroundColor:'#de6262', alignSelf: 'center', marginTop: 30, marginBottom: 20,width:150, borderRadius:10}} onPress={ () => this._confirmation_for_submit() }>
+            {(this.state.disabled)? <Spinner color='#ffffff'/> : <Text>Submit</Text>}
           </Button>: <Text/>}
       </Container>
     );

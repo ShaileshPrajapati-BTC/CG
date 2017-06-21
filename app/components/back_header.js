@@ -57,7 +57,7 @@ export default class Scan extends Component {
   }
   render() {
     return (
-        <Header>
+        <Header style={{ backgroundColor:'#de6262'}}>
           <Left>
             <Button transparent onPress={ () => this._back_press()} style={{height: 60}}>
               <Icon name="arrow-back"/>

@@ -6,7 +6,7 @@ import {
   Button
 } from 'native-base';
 
-import {View, AsyncStorage, ToastAndroid, StyleSheet, Dimensions} from 'react-native';
+import {View, AsyncStorage, ToastAndroid, StyleSheet, Dimensions,StatusBar} from 'react-native';
 import Header from './components/back_header.js';   
 import Camera from 'react-native-camera';
 import CONFIG from './config/config.js';
@@ -104,6 +104,7 @@ export default class Qrcode extends Component {
           <Container>
           <Header navigator={this.props.navigator} emergency_icon={true}/>
             <Content>
+              <StatusBar backgroundColor="#de6262" barStyle="light-content"/>
               <Camera onBarCodeRead={this._onBarCodeRead.bind(this)} style={styles.camera} >
                 <View style={styles.rectangleContainer}>
                   <View style={styles.rectangle}/>
