@@ -8,10 +8,19 @@ import {
   Thumbnail,Spinner
 } from 'native-base';
 
-import {Image, AsyncStorage,StyleSheet, Alert, Platform, DeviceEventEmitter,NativeAppEventEmitter,ToastAndroid,StatusBar} from 'react-native';       
-import PushNotification from'react-native-push-notification';
+import {Image,
+  AsyncStorage,
+  StyleSheet,
+  Alert, 
+  Platform, 
+  DeviceEventEmitter,
+  NativeAppEventEmitter,
+  StatusBar} from 'react-native';
+
+// import PushNotification from'react-native-push-notification';
 import geolib from 'geolib';
 import BackgroundTimer from 'react-native-background-timer';
+import DropdownAlert from 'react-native-dropdownalert';
 
 const EventEmitter = Platform.select({
   ios: () => NativeAppEventEmitter,
@@ -47,7 +56,7 @@ export default class Scan extends Component {
     });
     AsyncStorage.getItem('clock_status', (err, result) => {
       clock = JSON.parse(result);
-      if (clock!=null){
+      if (result!=null){
         // console.log(clock);
         this.setState({clock: clock});
       }
@@ -104,7 +113,10 @@ export default class Scan extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.navigator.getCurrentRoutes())
+    console.log("zczc->>>>>>>>>>>>>");
+    if (this.props.msg!=null){
+      this.dropdown.alertWithType(this.props.msg.status, this.props.msg.status, this.props.msg.message);
+    }
   }
 
   componentDidUnount() {
@@ -140,22 +152,22 @@ export default class Scan extends Component {
     return (
     <Image style={styles.container} ref={'backgroundImage'} source={{uri: 'http://pre12.deviantart.net/54fe/th/pre/i/2014/303/5/5/gradient_blur_abstract_hd_wallpaper_1920x1200_4426_by_satriohasmoro-d84o6ls.jpg'}}>
       <Container >
-        <Header style={{ backgroundColor:'#de6262'}}>
+        <Header style={{ backgroundColor:'#de6262', marginTop: (Platform.OS === 'ios') ? 20 : 0}}>
           <Left>
             <Thumbnail source={require('./images/user1.jpg')} />
           </Left>
           <Body style={{left: this.props.emergency_icon ? 30 : 0}}>
             <Title >{this.state.name}</Title>
-            <Subtitle style={{color: 'white',marginLeft: 5}}>{this.state.scan_status}</Subtitle>
+            <Subtitle style={{color: 'white', marginLeft: 5}}>{this.state.scan_status}</Subtitle>
           </Body>
           <Right>
             <Button transparent onPress={ () => this._logout()}>
-              <Text transparent style={{color: 'white'}}>
+              <Title transparent style={{color: 'white'}}>
                 Logout
-              </Text>             
+              </Title>             
             </Button>
-
-          </Right>          
+          </Right>   
+          <DropdownAlert ref={(ref) => this.dropdown = ref} updateStatusBar={false}/>       
         </Header>
 
         <Content contentContainerStyle={{flex: 1,justifyContent: 'center',alignItems: 'center'}}>
@@ -163,7 +175,7 @@ export default class Scan extends Component {
             backgroundColor="#de6262"
             barStyle="light-content"
           />
-          <Button  onPress={()=> this._checkTaskStatus()} style={{justifyContent:'center', backgroundColor:'#de6262', alignSelf: 'center', marginTop: 30, marginBottom: 20,width:100,height:100, borderRadius:50}}>
+          <Button  onPress={()=> this._checkTaskStatus()} style={{justifyContent:'center', backgroundColor:'#de6262', alignSelf: 'center', marginTop: 30, marginBottom: 20,width:120,height:120, borderRadius:60}}>
             <Text style={{ alignSelf: 'center'}}>{this.state.clock}</Text>
           </Button>
         </Content>

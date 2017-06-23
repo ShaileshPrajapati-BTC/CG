@@ -9,7 +9,9 @@ import {
   Right,Text,Thumbnail,Subtitle
 } from 'native-base';
 
-import {Image, AsyncStorage, View} from 'react-native'; 
+import {Image, AsyncStorage, View, Platform} from 'react-native'; 
+import DropdownAlert from 'react-native-dropdownalert';
+
 export default class Scan extends Component {
 
   constructor(props) {
@@ -49,6 +51,11 @@ export default class Scan extends Component {
       }
     })
   }
+  _alert(msg){
+    if (msg!=null){
+      this.dropdown.alertWithType(msg.status, msg.status, msg.message);
+    }  
+  }
 
   _back_press(){
     routes = this.props.navigator.getCurrentRoutes();
@@ -57,7 +64,7 @@ export default class Scan extends Component {
   }
   render() {
     return (
-        <Header style={{ backgroundColor:'#de6262'}}>
+        <Header style={{ backgroundColor:'#de6262', marginTop: (Platform.OS === 'ios') ? 20 : 0}}>
           <Left>
             <Button transparent onPress={ () => this._back_press()} style={{height: 60}}>
               <Icon name="arrow-back"/>
@@ -68,7 +75,8 @@ export default class Scan extends Component {
             <Title >{this.state.name}</Title>
             <Subtitle style={{color: 'white',marginLeft: 5}}>{this.state.scan_status}</Subtitle>
           </Body>
-          <Right/>    
+          <Right/>
+          <DropdownAlert ref={(ref) => this.dropdown = ref} updateStatusBar={false}/>
         </Header>
     );
   }

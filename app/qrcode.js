@@ -6,10 +6,19 @@ import {
   Button
 } from 'native-base';
 
-import {View, AsyncStorage, ToastAndroid, StyleSheet, Dimensions,StatusBar} from 'react-native';
+import {View, 
+  AsyncStorage, 
+  ToastAndroid, 
+  StyleSheet, 
+  Dimensions,
+  StatusBar,
+  Alert,
+  Platform
+  } from 'react-native';
 import Header from './components/back_header.js';   
 import Camera from 'react-native-camera';
 import CONFIG from './config/config.js';
+import DropdownAlert from 'react-native-dropdownalert'
 
 export default class Qrcode extends Component {
 
@@ -18,7 +27,8 @@ export default class Qrcode extends Component {
 
     this.state = {
       token: '',
-      clock: false
+      clock: false,
+      camera: true
     };
   }
 
@@ -27,10 +37,9 @@ export default class Qrcode extends Component {
   }
   
   componentDidMount(){
-    setTimeout( () => {
-      this.setState({data: false})
-    },1000);
-    
+    if (this.props.msg!=null){
+      this.header._alert(this.props.msg);
+    }
   }
 
   async _getToken(){
@@ -69,40 +78,51 @@ export default class Qrcode extends Component {
       AsyncStorage.setItem("scan_status", JSON.stringify(result.data.scan_status));
       AsyncStorage.setItem("clock_status", JSON.stringify(result.data.clock_status));
       AsyncStorage.setItem("in_out_status", JSON.stringify(result.data.in_out_status));
-      ToastAndroid.show(result.message, ToastAndroid.SHORT,ToastAndroid.CENTER);
+      // ToastAndroid.show(result.message, ToastAndroid.SHORT,ToastAndroid.CENTER);
+      // this._alertPopup('Success', result.message);
+      this._navigate('Scan',{status: 'success', message: result.message});
     }
     else{
-      ToastAndroid.show(result.message, ToastAndroid.SHORT,ToastAndroid.CENTER);
+      // ToastAndroid.show(result.message, ToastAndroid.SHORT,ToastAndroid.CENTER);
+      // this._alertPopup('Error', result.message);
+      this._navigate('Scan', {status: 'error', message: result.message});
     }
-    this.props.type._setStatus();
   }
 
   
   async _onBarCodeRead(result) {
       var $this = this;
-      
-      if (this.barCodeFlag) {
-        this.barCodeFlag = false;
-        setTimeout(function() {
-          $this._scan_in_and_out_request(result.data);
-          routes = $this.props.navigator.getCurrentRoutes();
-          routeToGo = routes.find( route => route.name == 'Scan');
-          $this.props.navigator.popToRoute(routeToGo);
-        }, 200);
+      if($this.state.camera) {
+        $this.setState({camera: false});
+        $this._scan_in_and_out_request(result.data);
       }
     }
 
-  _navigate(name) {
+  _navigate(name, msg_obj) {
     this.props.navigator.push({
-      name: name
+      name: name,
+      passProps: {
+        msg: msg_obj
+      }
     })
   }
 
+  _alertPopup(title, msg){
+    Alert.alert(
+      title,
+      msg,
+      [
+        {text: 'OK'},
+      ],
+      { cancelable: false }
+    )
+  }
+
   render() {
-    this.barCodeFlag = true;
+    // this.barCodeFlag = true;
       return (
           <Container>
-          <Header navigator={this.props.navigator} emergency_icon={true}/>
+          <Header navigator={this.props.navigator} emergency_icon={true} ref={(header) => { this.header = header; }}/>
             <Content>
               <StatusBar backgroundColor="#de6262" barStyle="light-content"/>
               <Camera onBarCodeRead={this._onBarCodeRead.bind(this)} style={styles.camera} >
@@ -116,10 +136,11 @@ export default class Qrcode extends Component {
   }
 }
 
+var height = (Platform.OS === 'ios') ? 100 : 80
 var styles = StyleSheet.create({
 
   camera: {
-    height: Dimensions.get("window").height - 80,
+    height: Dimensions.get("window").height - height,
     alignItems: 'center',
   },
 

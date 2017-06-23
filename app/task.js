@@ -18,7 +18,14 @@ import {
 const Picker_Item = Picker.Item;
 var picker_state = {};
 
-import {Image, StatusBar, Dimensions, AsyncStorage, Alert, ToastAndroid} from 'react-native';       
+import {Image,
+  StatusBar,
+  Dimensions,
+  AsyncStorage,
+  Alert,
+  ToastAndroid
+} from 'react-native';       
+
 import CONFIG from './config/config.js';
 import Header from './components/back_header.js';   
 
@@ -50,11 +57,11 @@ export default class Task extends Component {
     this.state['picker_state']=picker_state
   }
   
-  _navigate(name, type) {
+  _navigate(name, msg) {
     this.props.navigator.push({
       name: name,
       passProps: {
-        type: type
+        msg: msg
       }
     })
   }
@@ -132,7 +139,8 @@ export default class Task extends Component {
         injury_status: this.state.injury_status
       })
     }).catch(function(error) {
-      Alert.alert("Error", "Something went wrong please try again later!!");
+      // this._alertPopup('Error', "Something went wrong please try again later!!");
+      this.header._alert({status: 'error', message: CONFIG.something_went_wrong});
       $this.setState({disabled: false});
     });
     try {
@@ -140,21 +148,37 @@ export default class Task extends Component {
       console.log(res);
       if (res.status)
       {
-        ToastAndroid.show(res.message,ToastAndroid.SHORT,ToastAndroid.CENTER);
+        // ToastAndroid.show(res.message,ToastAndroid.SHORT,ToastAndroid.CENTER);
+        // this._alertPopup('Success', res.message);
+        // this.header._alert({status: 'success', message: res.message});
         $this.setState({disabled: false});
-        this._navigate('Qrcode', $this.props.type);
+        this._navigate('Qrcode', {status: 'success', message: res.message});
         picker_state = {};
       }
       else{
-        ToastAndroid.show(res.message,ToastAndroid.SHORT,ToastAndroid.CENTER);
+        // this._alertPopup('Error', res.message);
+        this.header._alert({status: 'error', message: res.message});
+        // ToastAndroid.show(res.message,ToastAndroid.SHORT,ToastAndroid.CENTER);
         $this.setState({disabled: false});
       }
     } catch(error) {
-      Alert.alert("Error", "Something went wrong please try again later!!");
+      // this._alertPopup('Error', "Something went wrong please try again later!!");
+      this.header._alert({status: 'error', message: CONFIG.something_went_wrong});
       console.log(error);
       $this.setState({disabled: false});
     }
   }  
+
+  _alertPopup(title, msg){
+    Alert.alert(
+      title,
+      msg,
+      [
+        {text: 'OK'},
+      ],
+      { cancelable: false }
+    )
+  }
 
   render() {
     const data = this.state.data;
@@ -208,11 +232,11 @@ export default class Task extends Component {
               <Form>
                 <Item stackedLabel style={{marginRight: 25}}>
                   <Label >Do you have any reimbursable Milage to enter?</Label>
-                  <Input onChangeText={(text) => {this.setState({extra_milage: text})}}/>
+                  <Input multiline={true} style={{height: 80}} onChangeText={(text) => {this.setState({extra_milage: text})}}/>
                 </Item>
                 <Item stackedLabel style={{marginRight: 25}}>
                   <Label> Any injuries to Client or to yourself?</Label>
-                  <Input onChangeText={(text) => {this.setState({injury_status: text})}}/>
+                  <Input multiline = {true} style={{height: 80}} onChangeText={(text) => {this.setState({injury_status: text})}}/>
                 </Item>
               </Form>
             </CardItem>
@@ -220,10 +244,10 @@ export default class Task extends Component {
         )
     return (
       <Container>
-        <Header navigator={this.props.navigator} emergency_icon={true}/>
-        {(this.state.loading)? <Spinner color='#2196F3' style={{marginLeft: 15}}/> : 
+        <Header navigator={this.props.navigator} emergency_icon={true} ref={(header) => { this.header = header; }}/>
+        <StatusBar backgroundColor="#de6262" barStyle="light-content"/>
+        {(this.state.loading)? <Spinner color='#de6262' style={{marginLeft: 15}}/> : 
           <Content >
-            <StatusBar backgroundColor="#de6262" barStyle="light-content"/>
             {task}
 
           </Content>

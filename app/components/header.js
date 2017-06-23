@@ -9,7 +9,11 @@ import {
   Right,Text,Thumbnail,Subtitle
 } from 'native-base';
 
-import {Image, AsyncStorage, View} from 'react-native'; 
+import {Image, 
+  AsyncStorage, 
+  View,
+  Platform
+} from 'react-native'; 
 export default class Scan extends Component {
 
   constructor(props) {
@@ -51,7 +55,7 @@ export default class Scan extends Component {
 
   render() {
     return (
-        <Header>
+        <Header style={{ backgroundColor:'#de6262', marginTop: (Platform.OS === 'ios') ? 20 : 0}}>
           <Left>
             <Thumbnail source={require('../images/user1.jpg')} />
           </Left>
@@ -60,9 +64,9 @@ export default class Scan extends Component {
             <Subtitle style={{color: 'white',marginLeft: 5}}>{this.state.scan_status}</Subtitle>
           </Body>
           <Right>
-            <Text transparent onPress={ () => this._logout()} style={{color: 'white'}}>
+            <Title transparent onPress={ () => this._logout()} style={{color: 'white'}}>
               Logout
-            </Text>
+            </Title>
           </Right>          
         </Header>
     );

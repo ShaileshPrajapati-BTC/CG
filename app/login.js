@@ -18,14 +18,16 @@ import {
   Platform,
   NativeAppEventEmitter,
   DeviceEventEmitter,
-  Image,View,Alert,Dimensions,StyleSheet,findNodeHandle,TextInput
+  Image,View,Alert,
+  Dimensions,StyleSheet,
+  findNodeHandle,TextInput
 } from 'react-native';
 
 // import PushNotification from'react-native-push-notification';
 
 import CONFIG from './config/config.js';
+import DropdownAlert from 'react-native-dropdownalert'
 
-import {BlurView} from 'react-native-blurry';
 
 export default class Login extends Component {
 
@@ -66,35 +68,53 @@ export default class Login extends Component {
       {
         AsyncStorage.setItem('token', JSON.stringify(res.data.token));
         AsyncStorage.setItem('name', JSON.stringify(res.data.fullname));
-        ToastAndroid.show(res.message,ToastAndroid.SHORT,ToastAndroid.CENTER,);
+        AsyncStorage.setItem("scan_status", JSON.stringify(res.data.scan_status));
+        AsyncStorage.setItem("clock_status", JSON.stringify(res.data.clock_status));
+        AsyncStorage.setItem("in_out_status", JSON.stringify(res.data.in_out_status));
+        AsyncStorage.setItem("appointment_id", JSON.stringify(res.data.appointment));
+        // ToastAndroid.show(res.message,ToastAndroid.SHORT,ToastAndroid.CENTER,);
         // PushNotification.localNotification ({
         //   message: "Dont Forget to enable Geo location.."
         // });
-        this._navigate('Scan','In');
+        // this._alertPopup('Success', res.message);
+        this._navigate('Scan',{status: 'success', message: res.message});
       }
       else{
         this.setState({disabled: false});
-        ToastAndroid.show(res.message,ToastAndroid.SHORT,ToastAndroid.CENTER,);
+        // this._alertPopup('Error', res.message);
+        this.dropdown.alertWithType('error', 'Error', res.message);
       }
     } catch(error) {
-      Alert.alert("Error", "Something went wrong please try again later!!");
+      // this._alertPopup('Error', "Something went wrong please try again later!!")
+      this.dropdown.alertWithType('error', 'Error', CONFIG.something_went_wrong);
+
       console.log(error);
     }
   }
 
-  _navigate(name) {
+  _navigate(name, msg_obj) {
     this.props.navigator.push({
-      name: name
+      name: name,
+      passProps: {
+        msg: msg_obj
+      }
     })
   }
 
-  imageLoaded() {
-    this.setState({ viewRef: findNodeHandle(this.refs.backgroundImage) });
+  _alertPopup(title, msg){
+    Alert.alert(
+      title,
+      msg,
+      [
+        {text: 'OK'},
+      ],
+      { cancelable: false }
+    )
   }
 
   render() {
     return (
-            <Image style={styles.container} ref={'backgroundImage'} source={{uri: 'http://pre12.deviantart.net/54fe/th/pre/i/2014/303/5/5/gradient_blur_abstract_hd_wallpaper_1920x1200_4426_by_satriohasmoro-d84o6ls.jpg'}} onLoadEnd={this.imageLoaded.bind(this)}  >
+            <Image style={styles.container} ref={'backgroundImage'} source={{uri: 'http://pre12.deviantart.net/54fe/th/pre/i/2014/303/5/5/gradient_blur_abstract_hd_wallpaper_1920x1200_4426_by_satriohasmoro-d84o6ls.jpg'}}>
               <Container >
                 <Content>
                   <StatusBar
@@ -120,6 +140,7 @@ export default class Login extends Component {
                   </Form>
                 </Content>
               </Container>
+              <DropdownAlert ref={(ref) => this.dropdown = ref} updateStatusBar={false}/>
             </Image>
     );
   }
