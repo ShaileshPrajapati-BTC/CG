@@ -44,7 +44,8 @@ export default class Qrcode extends Component {
 
   async _getToken(){
     AsyncStorage.getItem('token', (err, result) => {
-       token= JSON.parse(result)
+       token= JSON.parse(result);
+       console.log(token);
        if (result!=null){
           this.setState({token: token});
        }
@@ -105,7 +106,7 @@ export default class Qrcode extends Component {
     }
 
   _navigate(name, msg_obj) {
-    this.props.navigator.push({
+    this.props.navigator.resetTo({
       name: name,
       passProps: {
         msg: msg_obj

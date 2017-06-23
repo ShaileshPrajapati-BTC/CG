@@ -4,7 +4,7 @@ import {
   Content,
   Text,
   Button,Icon,Badge,
-  Header,Left,Body,Title,Right,Subtitle,
+  Header,Left,Body,Title,Right,Subtitle,Card, CardItem,
   Thumbnail,Spinner
 } from 'native-base';
 
@@ -150,15 +150,15 @@ export default class Scan extends Component {
   
   render() {
     return (
-    <Image style={styles.container} ref={'backgroundImage'} source={require('./images/back.jpg')}>
+    //<Image style={styles.container} ref={'backgroundImage'} source={require('./images/back.jpg')}>
+    //<Subtitle style={{fontSize:10,color: 'white', right: (Platform.OS === 'ios') ? 1 : 0}}></Subtitle>
       <Container >
-        <Header style={{ backgroundColor:'#de6262', marginTop: (Platform.OS === 'ios') ? 20 : 0}}>
+        <Header style={{ backgroundColor:'#de6262',height: (Platform.OS === 'ios') ? 64 : 0}}>
           <Left>
-            <Thumbnail source={require('./images/user1.jpg')} style={{bottom: (Platform.OS === 'ios') ? 6 : 0}}/>
+            <Thumbnail small source={require('./images/user1.jpg')} style={{bottom: (Platform.OS === 'ios') ? 0 : 0}}/>
           </Left>
-          <Body style={{right: (Platform.OS === 'ios') ? 30 : 0}}>
+          <Body style={{right: (Platform.OS === 'ios') ? 50 : 0}}>
             <Title style={{color: 'white'}}>{this.state.name}</Title>
-            <Subtitle style={{color: 'white', right: (Platform.OS === 'ios') ? 25 : 0}}>{this.state.scan_status}</Subtitle>
           </Body>
           <Right>
             <Button transparent onPress={ () => this._logout()}>
@@ -170,17 +170,48 @@ export default class Scan extends Component {
           <DropdownAlert ref={(ref) => this.dropdown = ref} updateStatusBar={false}/>       
         </Header>
 
-        <Content contentContainerStyle={{flex: 1,justifyContent: 'center',alignItems: 'center'}}>
-          <StatusBar
-            backgroundColor="#de6262"
-            barStyle="light-content"
-          />
-          <Button  onPress={()=> this._checkTaskStatus()} style={{justifyContent:'center', backgroundColor:'#de6262', alignSelf: 'center', marginTop: 30, marginBottom: 20,width:120,height:120, borderRadius:60}}>
-            <Text style={{ alignSelf: 'center'}}>{this.state.clock}</Text>
-          </Button>
-        </Content>
+            <Content contentContainerStyle={{flex: 1,justifyContent: 'center'}}>
+              <StatusBar backgroundColor="#de6262"/>
+            <Card>
+              <CardItem header >
+                <Text style={{color: '#de6262', fontSize: 20, fontWeight: "bold"}}>Appointment Information</Text>
+              </CardItem>
+              <CardItem>
+                <Icon active name="ios-person" />
+                <Text>Supervisor</Text>
+                <Right>
+                  <Text>Shoshana</Text>
+                </Right>
+              </CardItem>
+              <CardItem>
+                <Icon active name="ios-person" />
+                <Text>Patient</Text>
+                <Right>
+                  <Text>Shailesh</Text>
+                </Right>
+              </CardItem>
+              <CardItem>
+                <Icon active name="ios-alarm" />
+                <Text>Appointment Time</Text>
+                <Right>
+                  <Text>13:00 - 15:00</Text>
+                </Right>
+              </CardItem>
+              <CardItem>
+                <Icon active name="ios-timer" />
+                <Text>Status</Text>
+                <Right>
+                  <Text>{this.state.scan_status}</Text>
+                </Right>
+              </CardItem>
+            </Card>
+              <Button  onPress={()=> this._checkTaskStatus()} style={{justifyContent:'center', backgroundColor:'#de6262', marginTop:20,marginBottom:40, alignSelf: 'center',width:120,height:120, borderRadius:60}}>
+                <Text style={{ alignSelf: 'center'}}>{this.state.clock}</Text>
+              </Button>
+            </Content>
+            <Image small  style={{alignSelf: 'center'}} source={require('./images/bottom_logoo.png')}/>
       </Container>
-    </Image>
+    //</Image>
     );
   }
 }

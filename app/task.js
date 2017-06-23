@@ -110,7 +110,7 @@ export default class Task extends Component {
 
   _confirmation_for_submit(){
     Alert.alert(
-      'Confirmation',
+      'Confirmation!',
       'Are you sure you want to submit?',
       [
         {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
@@ -184,6 +184,25 @@ export default class Task extends Component {
     const data = this.state.data;
     var task = []
     var sub = []
+          task.push(
+          <Card>
+            <CardItem header >
+              <Text style={{color: '#de6262', fontSize: 20, fontWeight: "bold"}}>Extra Activity</Text>
+            </CardItem>
+            <CardItem>
+              <Form>
+                <Item stackedLabel style={{marginRight: 25}}>
+                  <Label >Do you have any reimbursable Milage to enter?</Label>
+                  <Input multiline={true}  onChangeText={(text) => {this.setState({extra_milage: text})}}/>
+                </Item>
+                <Item stackedLabel style={{marginRight: 25}}>
+                  <Label> Any injuries to Client or to yourself?</Label>
+                  <Input multiline = {true}  onChangeText={(text) => {this.setState({injury_status: text})}}/>
+                </Item>
+              </Form>
+            </CardItem>
+          </Card>
+        )
       for (var key in data) {
         if (data.hasOwnProperty(key)) {
           console.log(key + " -> " + data[key]);
@@ -198,8 +217,9 @@ export default class Task extends Component {
                   <Right>
                     <Picker
                       supportedOrientations={['portrait','landscape']}
-                      iosHeader="Select one"
+                      iosHeader="Care Plan"
                       mode="dropdown" style={{height:35, width:130}}
+                      headerBackButtonText="Go Back"
                       onValueChange={this.onValueChange.bind(this, val)}
                       selectedValue={this.state.picker_state['todo_id-'+val]}
                     >
@@ -213,7 +233,7 @@ export default class Task extends Component {
             }
           }
           task.push(
-            <Card style={{borderBottomWidth:5, borderBottomColor: 'red'}} bordered={true}>
+            <Card style={{borderBottomWidth:5}} bordered={true}>
               <CardItem header >
                 <Text style={{color: '#de6262', fontSize: 20, fontWeight: "bold"}}>{key}</Text>
               </CardItem>
@@ -223,29 +243,11 @@ export default class Task extends Component {
           sub = []
         }
       }
-      task.push(
-          <Card>
-            <CardItem header >
-              <Text style={{color: '#de6262', fontSize: 20, fontWeight: "bold"}}>Extra Activity</Text>
-            </CardItem>
-            <CardItem>
-              <Form>
-                <Item stackedLabel style={{marginRight: 25}}>
-                  <Label >Do you have any reimbursable Milage to enter?</Label>
-                  <Input multiline={true} style={{height: 80}} onChangeText={(text) => {this.setState({extra_milage: text})}}/>
-                </Item>
-                <Item stackedLabel style={{marginRight: 25}}>
-                  <Label> Any injuries to Client or to yourself?</Label>
-                  <Input multiline = {true} style={{height: 80}} onChangeText={(text) => {this.setState({injury_status: text})}}/>
-                </Item>
-              </Form>
-            </CardItem>
-          </Card>
-        )
+
     return (
       <Container>
         <Header navigator={this.props.navigator} emergency_icon={true} ref={(header) => { this.header = header; }}/>
-        <StatusBar backgroundColor="#de6262" barStyle="light-content"/>
+        <StatusBar backgroundColor="#de6262" />
         {(this.state.loading)? <Spinner color='#de6262' style={{marginLeft: 15}}/> : 
           <Content >
             {task}

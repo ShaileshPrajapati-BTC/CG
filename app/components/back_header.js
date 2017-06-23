@@ -43,12 +43,9 @@ export default class Scan extends Component {
     });
   }
   
-  _navigate(name, type) {
+  _navigate(name) {
     this.props.navigator.push({
-      name: name,
-      passProps: {
-        type: type
-      }
+      name: name
     })
   }
   _alert(msg){
@@ -61,19 +58,19 @@ export default class Scan extends Component {
     routes = this.props.navigator.getCurrentRoutes();
     routeToGo = routes.find( route => route.name == 'Scan');
     this.props.navigator.popToRoute(routeToGo);
+    //this._navigate('Scan',null);
   }
   render() {
     return (
-        <Header style={{ backgroundColor:'#de6262', marginTop: (Platform.OS === 'ios') ? 20 : 0}}>
+        <Header style={{ backgroundColor:'#de6262', height: (Platform.OS === 'ios') ? 64 : 0}}>
           <Left>
             <Button transparent onPress={ () => this._back_press()} style={{height: 60}}>
-              <Icon name="arrow-back" style={{color: 'white',bottom: (Platform.OS === 'ios') ? 7 : 0}}/>
-                <Thumbnail  source={require('../images/user1.jpg')} style={{left: 5, bottom: (Platform.OS === 'ios') ? 6 : 0}}/>                    
+              <Icon name="arrow-back" style={{color: 'white'}}/>
+                <Thumbnail small source={require('../images/user1.jpg')} style={{left: 5}}/>                    
             </Button>
           </Left>
-          <Body style={{right: (Platform.OS === 'ios') ? 20 : 0}}>
-            <Title >{this.state.name}</Title>
-            <Subtitle style={{color: 'white',right: (Platform.OS === 'ios') ? 30 : 0}}>{this.state.scan_status}</Subtitle>
+          <Body style={{right: (Platform.OS === 'ios') ? 30 : 0}}>
+            <Title style={{color: 'white'}}>{this.state.name}</Title>
           </Body>
           <Right/>
           <DropdownAlert ref={(ref) => this.dropdown = ref} updateStatusBar={false}/>

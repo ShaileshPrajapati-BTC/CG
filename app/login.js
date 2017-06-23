@@ -68,10 +68,12 @@ export default class Login extends Component {
       {
         AsyncStorage.setItem('token', JSON.stringify(res.data.token));
         AsyncStorage.setItem('name', JSON.stringify(res.data.fullname));
-        AsyncStorage.setItem("scan_status", JSON.stringify(res.data.scan_status));
-        AsyncStorage.setItem("clock_status", JSON.stringify(res.data.clock_status));
-        AsyncStorage.setItem("in_out_status", JSON.stringify(res.data.in_out_status));
-        AsyncStorage.setItem("appointment_id", JSON.stringify(res.data.appointment));
+        if (res.data.scan_status!=null){
+          AsyncStorage.setItem("scan_status", JSON.stringify(res.data.scan_status));
+          AsyncStorage.setItem("clock_status", JSON.stringify(res.data.clock_status));
+          AsyncStorage.setItem("in_out_status", JSON.stringify(res.data.in_out_status));
+          AsyncStorage.setItem("appointment_id", JSON.stringify(res.data.appointment));
+        }
         // ToastAndroid.show(res.message,ToastAndroid.SHORT,ToastAndroid.CENTER,);
         // PushNotification.localNotification ({
         //   message: "Dont Forget to enable Geo location.."
@@ -87,7 +89,7 @@ export default class Login extends Component {
     } catch(error) {
       // this._alertPopup('Error', "Something went wrong please try again later!!")
       this.dropdown.alertWithType('error', 'Error', CONFIG.something_went_wrong);
-
+      this.setState({disabled: false});
       console.log(error);
     }
   }
@@ -114,24 +116,21 @@ export default class Login extends Component {
 
   render() {
     return (
-            <Image style={styles.container} ref={'backgroundImage'} source={require('./images/back.jpg')} >
+           // <Image style={styles.container} ref={'backgroundImage'} source={require('./images/back.jpg')} >
               <Container >
-                <Content>
-                  <StatusBar
-                    backgroundColor="#de6262"
-                    barStyle="light-content"
-                  />
-                  <Image square  style={{alignSelf: 'center',marginTop:100 }} source={require('./images/Logo.png')}  />
+                <Content contentContainerStyle={{flex: 1,justifyContent: 'center',alignItems: 'center'}}>
+                  <StatusBar backgroundColor="#de6262"/>
+                  <Image square  style={{alignSelf: 'center', width:300, height:60 }} source={require('./images/Logoo.png')}  />
                   <Form style={{ alignSelf: 'center',marginTop:50, width:300}}>
                     
-                    <Item style={{borderColor: "#E0E0E0",borderWidth:1, borderRadius:5,marginBottom:10}} >
-                      <Icon active name='ios-call' style={{fontSize: 30, color: 'white', paddingLeft: 15}}/>
-                      <Input placeholder='Phone number' placeholderTextColor="#E0E0E0" style={{fontSize: 20, color: 'white'}} keyboardType="numeric" autoFocus = {false} onChangeText={(text) => {this.setState({mobile: text})}}/>
+                    <Item style={{borderColor: "#E0E0E0",borderWidth: 1, borderRadius:5,marginBottom:10}} >
+                      <Icon active name='ios-call' style={{fontSize: 30, paddingLeft: 15}}/>
+                      <Input placeholder='Phone number' placeholderTextColor="#E0E0E0" style={{fontSize: 20}} keyboardType="numeric" autoFocus = {false} onChangeText={(text) => {this.setState({mobile: text})}}/>
                     </Item>
                     
                     <Item style={{borderColor: "#E0E0E0", borderWidth:1, borderRadius:5}} >
-                      <Icon active name='ios-lock' style={{fontSize: 30, color: 'white', paddingLeft: 16}}/>
-                      <Input placeholder='Password' placeholderTextColor="#E0E0E0" style={{fontSize: 20, color: 'white'}} secureTextEntry={true} onChangeText={(text) => {this.setState({password: text})}}/>
+                      <Icon active name='ios-lock' style={{fontSize: 30, paddingLeft: 16}}/>
+                      <Input placeholder='Password' placeholderTextColor="#E0E0E0" style={{fontSize: 20}} secureTextEntry={true} onChangeText={(text) => {this.setState({password: text})}}/>
                     </Item>
                     
                       <Button disabled={this.state.disabled} style={{justifyContent:'center',borderColor:'#de6262', backgroundColor: '#de6262',borderRadius:10, marginTop: 25, marginBottom: 20, marginLeft:15,width:285,borderWidth:1 }} onPress={ () => this.login() }>
@@ -139,9 +138,9 @@ export default class Login extends Component {
                       </Button>
                   </Form>
                 </Content>
-              </Container>
               <DropdownAlert ref={(ref) => this.dropdown = ref} updateStatusBar={false}/>
-            </Image>
+              </Container>
+            //</Image>
     );
   }
 }

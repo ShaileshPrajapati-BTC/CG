@@ -45,15 +45,15 @@ export default class Splash extends Component {
 
   render() {
     return (
-      <Image style={styles.container} ref={'backgroundImage'} source={require('./images/back.jpg')}>
+      //<Image style={styles.container} ref={'backgroundImage'} source={require('./images/back.jpg')}>
         <Container>
-            <Content >
-              <StatusBar backgroundColor="#de6262" barStyle="light-content"/>
-              <Image square  style={{alignSelf: 'center', marginTop: Dimensions.get("window").height/2-120 }} source={require('./images/Logo.png')}  />
+            <Content contentContainerStyle={{flex: 1,justifyContent: 'center',alignItems: 'center'}}>
+              <StatusBar backgroundColor="#de6262"/>
+              <Image square  style={{alignSelf: 'center', width:300, height:60 }} source={require('./images/Logoo.png')}  />
               <Spinner color='#de6262'/>            
           </Content>
         </Container>
-      </Image>
+      //</Image>
     );
   }
 }
