@@ -41,29 +41,29 @@ export default class Scan extends Component {
   }
   
   _setStatus(){
-    AsyncStorage.getItem('name', (err, result) => {
-      name = JSON.parse(result)      
-      if (name!=null){
+    AsyncStorage.getItem('name', (err, result) => {     
+      if (result!=null){
+        name = JSON.parse(result) 
         this.setState({name: name});
       }
     });
     AsyncStorage.getItem('scan_status', (err, result) => {
-      scan_status = JSON.parse(result)      
-      if (scan_status!=null){
+      if (result!=null){
+        scan_status = JSON.parse(result);
         // console.log(scan_status);
         this.setState({scan_status: scan_status});
       }
     });
     AsyncStorage.getItem('clock_status', (err, result) => {
-      clock = JSON.parse(result);
       if (result!=null){
+        clock = JSON.parse(result); 
         // console.log(clock);
         this.setState({clock: clock});
       }
     });
     AsyncStorage.getItem('location', (err, result) => {
-      location = JSON.parse(result);      
-      if (location!=null){
+      if (result!=null){
+        location = JSON.parse(result);
         console.log(location);
         this.setState({longitude: location.longitude, latitude: location.latitude});
         // this._startLocationTracking();
@@ -73,8 +73,8 @@ export default class Scan extends Component {
       }
     });
     AsyncStorage.getItem('in_out_status', (err, result) => {
-      in_out_status= JSON.parse(result)
       if (result!=null){
+        in_out_status= JSON.parse(result)
         this.setState({in_out_status: in_out_status});
       }
     });
@@ -125,10 +125,10 @@ export default class Scan extends Component {
 
   _checkTaskStatus(){
     if (this.state.in_out_status == "Out"){
-      this._navigate('Task',this);
+      this._navigate('Task');
     }
     else{
-      this._navigate('Qrcode', this);
+      this._navigate('Qrcode');
     }
 
   }
@@ -150,15 +150,15 @@ export default class Scan extends Component {
   
   render() {
     return (
-    <Image style={styles.container} ref={'backgroundImage'} source={{uri: 'http://pre12.deviantart.net/54fe/th/pre/i/2014/303/5/5/gradient_blur_abstract_hd_wallpaper_1920x1200_4426_by_satriohasmoro-d84o6ls.jpg'}}>
+    <Image style={styles.container} ref={'backgroundImage'} source={require('./images/back.jpg')}>
       <Container >
         <Header style={{ backgroundColor:'#de6262', marginTop: (Platform.OS === 'ios') ? 20 : 0}}>
           <Left>
-            <Thumbnail source={require('./images/user1.jpg')} />
+            <Thumbnail source={require('./images/user1.jpg')} style={{bottom: (Platform.OS === 'ios') ? 6 : 0}}/>
           </Left>
-          <Body style={{left: this.props.emergency_icon ? 30 : 0}}>
-            <Title >{this.state.name}</Title>
-            <Subtitle style={{color: 'white', marginLeft: 5}}>{this.state.scan_status}</Subtitle>
+          <Body style={{right: (Platform.OS === 'ios') ? 30 : 0}}>
+            <Title style={{color: 'white'}}>{this.state.name}</Title>
+            <Subtitle style={{color: 'white', right: (Platform.OS === 'ios') ? 25 : 0}}>{this.state.scan_status}</Subtitle>
           </Body>
           <Right>
             <Button transparent onPress={ () => this._logout()}>

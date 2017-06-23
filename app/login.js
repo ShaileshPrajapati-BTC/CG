@@ -114,7 +114,7 @@ export default class Login extends Component {
 
   render() {
     return (
-            <Image style={styles.container} ref={'backgroundImage'} source={{uri: 'http://pre12.deviantart.net/54fe/th/pre/i/2014/303/5/5/gradient_blur_abstract_hd_wallpaper_1920x1200_4426_by_satriohasmoro-d84o6ls.jpg'}}>
+            <Image style={styles.container} ref={'backgroundImage'} source={require('./images/back.jpg')} >
               <Container >
                 <Content>
                   <StatusBar

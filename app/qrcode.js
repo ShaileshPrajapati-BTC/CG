@@ -69,23 +69,29 @@ export default class Qrcode extends Component {
       Alert.alert("Error", "Something went wrong please try again later!!");
     });;
 
-    let result = await response.json();
-    console.log(result);
-    if (result.status){
-      AsyncStorage.setItem("client_id", JSON.stringify(qr_data.client_id));
-      AsyncStorage.setItem("appointment_id", JSON.stringify(result.data.appointment));
-      AsyncStorage.setItem("location", JSON.stringify(qr_data.location));
-      AsyncStorage.setItem("scan_status", JSON.stringify(result.data.scan_status));
-      AsyncStorage.setItem("clock_status", JSON.stringify(result.data.clock_status));
-      AsyncStorage.setItem("in_out_status", JSON.stringify(result.data.in_out_status));
-      // ToastAndroid.show(result.message, ToastAndroid.SHORT,ToastAndroid.CENTER);
-      // this._alertPopup('Success', result.message);
-      this._navigate('Scan',{status: 'success', message: result.message});
-    }
-    else{
-      // ToastAndroid.show(result.message, ToastAndroid.SHORT,ToastAndroid.CENTER);
-      // this._alertPopup('Error', result.message);
-      this._navigate('Scan', {status: 'error', message: result.message});
+    try {
+      let result = await response.json();
+      console.log(result);
+      if (result.status){
+        AsyncStorage.setItem("client_id", JSON.stringify(qr_data.client_id));
+        AsyncStorage.setItem("appointment_id", JSON.stringify(result.data.appointment));
+        AsyncStorage.setItem("location", JSON.stringify(qr_data.location));
+        AsyncStorage.setItem("scan_status", JSON.stringify(result.data.scan_status));
+        AsyncStorage.setItem("clock_status", JSON.stringify(result.data.clock_status));
+        AsyncStorage.setItem("in_out_status", JSON.stringify(result.data.in_out_status));
+        // ToastAndroid.show(result.message, ToastAndroid.SHORT,ToastAndroid.CENTER);
+        // this._alertPopup('Success', result.message);
+        this._navigate('Scan',{status: 'success', message: result.message});
+      }
+      else{
+        // ToastAndroid.show(result.message, ToastAndroid.SHORT,ToastAndroid.CENTER);
+        // this._alertPopup('Error', result.message);
+        this._navigate('Scan', {status: 'error', message: result.message});
+      }
+    } catch(error) {
+      // this._alertPopup('Error', "Something went wrong please try again later!!");
+      this.header._alert({status: 'error', message: CONFIG.something_went_wrong});
+      console.log(error);
     }
   }
 
@@ -122,9 +128,9 @@ export default class Qrcode extends Component {
     // this.barCodeFlag = true;
       return (
           <Container>
-          <Header navigator={this.props.navigator} emergency_icon={true} ref={(header) => { this.header = header; }}/>
+          <Header navigator={this.props.navigator} ref={(header) => { this.header = header; }}/>
             <Content>
-              <StatusBar backgroundColor="#de6262" barStyle="light-content"/>
+              <StatusBar backgroundColor="#de6262" />
               <Camera onBarCodeRead={this._onBarCodeRead.bind(this)} style={styles.camera} >
                 <View style={styles.rectangleContainer}>
                   <View style={styles.rectangle}/>
@@ -136,7 +142,7 @@ export default class Qrcode extends Component {
   }
 }
 
-var height = (Platform.OS === 'ios') ? 100 : 80
+var height = (Platform.OS === 'ios') ? 60 : 80
 var styles = StyleSheet.create({
 
   camera: {

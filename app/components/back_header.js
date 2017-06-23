@@ -67,13 +67,13 @@ export default class Scan extends Component {
         <Header style={{ backgroundColor:'#de6262', marginTop: (Platform.OS === 'ios') ? 20 : 0}}>
           <Left>
             <Button transparent onPress={ () => this._back_press()} style={{height: 60}}>
-              <Icon name="arrow-back"/>
-                <Thumbnail style={{marginLeft: 5}} source={require('../images/user1.jpg')} />                    
+              <Icon name="arrow-back" style={{color: 'white',bottom: (Platform.OS === 'ios') ? 7 : 0}}/>
+                <Thumbnail  source={require('../images/user1.jpg')} style={{left: 5, bottom: (Platform.OS === 'ios') ? 6 : 0}}/>                    
             </Button>
           </Left>
-          <Body style={{left: this.props.emergency_icon ? 30 : 0}}>
+          <Body style={{right: (Platform.OS === 'ios') ? 20 : 0}}>
             <Title >{this.state.name}</Title>
-            <Subtitle style={{color: 'white',marginLeft: 5}}>{this.state.scan_status}</Subtitle>
+            <Subtitle style={{color: 'white',right: (Platform.OS === 'ios') ? 30 : 0}}>{this.state.scan_status}</Subtitle>
           </Body>
           <Right/>
           <DropdownAlert ref={(ref) => this.dropdown = ref} updateStatusBar={false}/>
