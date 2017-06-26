@@ -176,7 +176,7 @@ export default class Scan extends Component {
           </Right>   
           <DropdownAlert ref={(ref) => this.dropdown = ref} updateStatusBar={false}/>       
         </Header>
-        <Content>
+        <Content scrollEnabled={false}>
           <StatusBar backgroundColor="#de6262"/>
           <Card style={{marginTop: 20}}>
             <CardItem header>
@@ -198,7 +198,7 @@ export default class Scan extends Component {
             </CardItem>
           </Card>
           <Button  onPress={()=> this._checkTaskStatus()} style={{justifyContent:'center', backgroundColor:'#de6262', marginTop:50, marginBottom:30, alignSelf: 'center',width:120,height:120, borderRadius:60}}>
-            <Text style={{ alignSelf: 'center'}}>{this.state.clock}</Text>
+            <Text style={{ alignSelf: 'center'}}>{this.state.clock.toUpperCase()}</Text>
           </Button>
         </Content>
         <Image small  style={{alignSelf: 'center',marginBottom: 10}} source={require('./images/bottom_logoo.png')}/>

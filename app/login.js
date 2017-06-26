@@ -131,7 +131,7 @@ export default class Login extends Component {
     return (
            // <Image style={styles.container} ref={'backgroundImage'} source={require('./images/back.jpg')} >
               <Container >
-                <Content contentContainerStyle={{flex: 1,justifyContent: 'center',alignItems: 'center'}}>
+                <Content scrollEnabled={false} contentContainerStyle={{flex: 1,justifyContent: 'center',alignItems: 'center'}}>
                   <StatusBar backgroundColor="#de6262"/>
                   <Image square  style={{alignSelf: 'center', width:300, height:60 }} source={require('./images/Logoo.png')}  />
                   <Form style={{ alignSelf: 'center',marginTop:50, width:300}}>
