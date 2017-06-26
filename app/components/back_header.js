@@ -62,7 +62,7 @@ export default class Scan extends Component {
   }
   render() {
     return (
-        <Header style={{ backgroundColor:'#de6262', height: (Platform.OS === 'ios') ? 64 : 0}}>
+        <Header style={{ backgroundColor:'#de6262', height: (Platform.OS === 'ios') ? 64 : 54}}>
           <Left>
             <Button transparent onPress={ () => this._back_press()} style={{height: 60}}>
               <Icon name="arrow-back" style={{color: 'white'}}/>

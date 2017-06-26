@@ -42,6 +42,18 @@ export default class Login extends Component {
     };
   }
 
+  _validate(){
+    if (this.state.mobile.length == 0){
+      this.dropdown.alertWithType('error', 'Error', CONFIG.mobile);
+    }else if (this.state.mobile.length < 10 ){
+      this.dropdown.alertWithType('error', 'Error', CONFIG.invalid_mobile);
+    }else if (this.state.password.length ==0){
+      this.dropdown.alertWithType('error', 'Error', CONFIG.password);
+    }else{
+      this.login();
+    }
+  }
+
   async login(){
     var $this = this;
     this.setState({disabled: true})
@@ -125,7 +137,7 @@ export default class Login extends Component {
                     
                     <Item style={{borderColor: "#E0E0E0",borderWidth: 1, borderRadius:5,marginBottom:10}} >
                       <Icon active name='ios-call' style={{fontSize: 30, paddingLeft: 15}}/>
-                      <Input placeholder='Phone number' placeholderTextColor="#E0E0E0" style={{fontSize: 20}} keyboardType="numeric" autoFocus = {false} onChangeText={(text) => {this.setState({mobile: text})}}/>
+                      <Input maxLength={10} placeholder='Phone number' placeholderTextColor="#E0E0E0" style={{fontSize: 20}} keyboardType="numeric" autoFocus = {false} onChangeText={(text) => {this.setState({mobile: text})}}/>
                     </Item>
                     
                     <Item style={{borderColor: "#E0E0E0", borderWidth:1, borderRadius:5}} >
@@ -133,7 +145,7 @@ export default class Login extends Component {
                       <Input placeholder='Password' placeholderTextColor="#E0E0E0" style={{fontSize: 20}} secureTextEntry={true} onChangeText={(text) => {this.setState({password: text})}}/>
                     </Item>
                     
-                      <Button disabled={this.state.disabled} style={{justifyContent:'center',borderColor:'#de6262', backgroundColor: '#de6262',borderRadius:10, marginTop: 25, marginBottom: 20, marginLeft:15,width:285,borderWidth:1 }} onPress={ () => this.login() }>
+                      <Button disabled={this.state.disabled} style={{justifyContent:'center',borderColor:'#de6262', backgroundColor: '#de6262',borderRadius:10, marginTop: 25, marginBottom: 20, marginLeft:15,width:285,borderWidth:1 }} onPress={ () => this._validate() }>
                         {(this.state.disabled)? <Spinner color='#ffffff'/> : <Text>Sign In</Text>}
                       </Button>
                   </Form>

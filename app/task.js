@@ -57,11 +57,13 @@ export default class Task extends Component {
     this.state['picker_state']=picker_state
   }
   
-  _navigate(name, msg) {
+  _navigate(name, data) {
     this.props.navigator.push({
       name: name,
       passProps: {
-        msg: msg
+        picker_state: data.picker_state,
+        extra_milage: data.extra_milage,
+        injury_status: data.injury_status
       }
     })
   }
@@ -121,52 +123,12 @@ export default class Task extends Component {
   }
 
   async _sendTodoList(){
-    var $this = this;
-    this.setState({disabled: true})
-
-    let response = await fetch(CONFIG.BASE_URL+'todolist/update', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'access_token': this.state.token
-      },
-      body: JSON.stringify(
-      {
-        appointment_id: this.state.appointment_id,
-        todo_list: this.state.picker_state,
-        extra_milage: this.state.extra_milage,
-        injury_status: this.state.injury_status
-      })
-    }).catch(function(error) {
-      // this._alertPopup('Error', "Something went wrong please try again later!!");
-      this.header._alert({status: 'error', message: CONFIG.something_went_wrong});
-      $this.setState({disabled: false});
+    this.setState({disabled: true, loading: true});
+    this._navigate('Qrcode', {
+      picker_state: this.state.picker_state,
+      extra_milage: this.state.extra_milage,
+      injury_status: this.state.injury_status
     });
-    try {
-      let res = await response.json();
-      console.log(res);
-      if (res.status)
-      {
-        // ToastAndroid.show(res.message,ToastAndroid.SHORT,ToastAndroid.CENTER);
-        // this._alertPopup('Success', res.message);
-        // this.header._alert({status: 'success', message: res.message});
-        $this.setState({disabled: false});
-        this._navigate('Qrcode', {status: 'success', message: res.message});
-        picker_state = {};
-      }
-      else{
-        // this._alertPopup('Error', res.message);
-        this.header._alert({status: 'error', message: res.message});
-        // ToastAndroid.show(res.message,ToastAndroid.SHORT,ToastAndroid.CENTER);
-        $this.setState({disabled: false});
-      }
-    } catch(error) {
-      // this._alertPopup('Error', "Something went wrong please try again later!!");
-      this.header._alert({status: 'error', message: CONFIG.something_went_wrong});
-      console.log(error);
-      $this.setState({disabled: false});
-    }
   }  
 
   _alertPopup(title, msg){
@@ -248,10 +210,9 @@ export default class Task extends Component {
       <Container>
         <Header navigator={this.props.navigator} emergency_icon={true} ref={(header) => { this.header = header; }}/>
         <StatusBar backgroundColor="#de6262" />
-        {(this.state.loading)? <Spinner color='#de6262' style={{marginLeft: 15}}/> : 
+        {(this.state.loading)? <Content contentContainerStyle={{flex: 1, justifyContent: 'center',alignItems: 'center'}}><Spinner color='#de6262'/><Text style={{color: '#de6262'}}>Please wait...</Text></Content> : 
           <Content >
             {task}
-
           </Content>
         }
         {(!this.state.loading)? 

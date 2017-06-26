@@ -153,9 +153,9 @@ export default class Scan extends Component {
     //<Image style={styles.container} ref={'backgroundImage'} source={require('./images/back.jpg')}>
     //<Subtitle style={{fontSize:10,color: 'white', right: (Platform.OS === 'ios') ? 1 : 0}}></Subtitle>
       <Container >
-        <Header style={{ backgroundColor:'#de6262',height: (Platform.OS === 'ios') ? 64 : 0}}>
+        <Header style={{ backgroundColor:'#de6262',height: (Platform.OS === 'ios') ? 64 : 54}}>
           <Left>
-            <Thumbnail small source={require('./images/user1.jpg')} style={{bottom: (Platform.OS === 'ios') ? 0 : 0}}/>
+            <Thumbnail small source={require('./images/user1.jpg')}/>
           </Left>
           <Body style={{right: (Platform.OS === 'ios') ? 50 : 0}}>
             <Title style={{color: 'white'}}>{this.state.name}</Title>
@@ -209,7 +209,7 @@ export default class Scan extends Component {
                 <Text style={{ alignSelf: 'center'}}>{this.state.clock}</Text>
               </Button>
             </Content>
-            <Image small  style={{alignSelf: 'center'}} source={require('./images/bottom_logoo.png')}/>
+            <Image small  style={{alignSelf: 'center',marginBottom: 10}} source={require('./images/bottom_logoo.png')}/>
       </Container>
     //</Image>
     );
