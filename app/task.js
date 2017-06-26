@@ -146,25 +146,6 @@ export default class Task extends Component {
     const data = this.state.data;
     var task = []
     var sub = []
-          task.push(
-          <Card>
-            <CardItem header >
-              <Text style={{color: '#de6262', fontSize: 20, fontWeight: "bold"}}>Extra Activity</Text>
-            </CardItem>
-            <CardItem>
-              <Form>
-                <Item stackedLabel style={{marginRight: 25}}>
-                  <Label >Do you have any reimbursable Milage to enter?</Label>
-                  <Input multiline={true}  onChangeText={(text) => {this.setState({extra_milage: text})}}/>
-                </Item>
-                <Item stackedLabel style={{marginRight: 25}}>
-                  <Label> Any injuries to Client or to yourself?</Label>
-                  <Input multiline = {true}  onChangeText={(text) => {this.setState({injury_status: text})}}/>
-                </Item>
-              </Form>
-            </CardItem>
-          </Card>
-        )
       for (var key in data) {
         if (data.hasOwnProperty(key)) {
           console.log(key + " -> " + data[key]);
@@ -205,7 +186,25 @@ export default class Task extends Component {
           sub = []
         }
       }
-
+      task.push(
+      <Card>
+        <CardItem header >
+          <Text style={{color: '#de6262', fontSize: 20, fontWeight: "bold"}}>Extra Activity</Text>
+        </CardItem>
+        <CardItem>
+          <Form>
+            <Item stackedLabel style={{marginRight: 25}}>
+              <Label >Do you have any reimbursable Milage to enter?</Label>
+              <Input multiline={true}  onChangeText={(text) => {this.setState({extra_milage: text})}}/>
+            </Item>
+            <Item stackedLabel style={{marginRight: 25}}>
+              <Label> Any injuries to Client or to yourself?</Label>
+              <Input multiline = {true}  onChangeText={(text) => {this.setState({injury_status: text})}}/>
+            </Item>
+          </Form>
+        </CardItem>
+      </Card>
+    )
     return (
       <Container>
         <Header navigator={this.props.navigator} emergency_icon={true} ref={(header) => { this.header = header; }}/>

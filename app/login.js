@@ -80,6 +80,7 @@ export default class Login extends Component {
       {
         AsyncStorage.setItem('token', JSON.stringify(res.data.token));
         AsyncStorage.setItem('name', JSON.stringify(res.data.fullname));
+        AsyncStorage.setItem("supervisor_name", JSON.stringify(res.data.supervisor_name));
         if (res.data.scan_status!=null){
           AsyncStorage.setItem("scan_status", JSON.stringify(res.data.scan_status));
           AsyncStorage.setItem("clock_status", JSON.stringify(res.data.clock_status));

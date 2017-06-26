@@ -14,7 +14,7 @@ import {Image,
   Alert, 
   Platform, 
   DeviceEventEmitter,
-  NativeAppEventEmitter,
+  NativeAppEventEmitter,View,
   StatusBar} from 'react-native';
 
 // import PushNotification from'react-native-push-notification';
@@ -36,17 +36,12 @@ export default class Scan extends Component {
       latitude: '',
       longitude: '',
       clock: 'Clock in',
-      in_out_status: 'In'
+      in_out_status: 'In',
+      supervisor_name: ''
     };
   }
   
   _setStatus(){
-    AsyncStorage.getItem('name', (err, result) => {     
-      if (result!=null){
-        name = JSON.parse(result) 
-        this.setState({name: name});
-      }
-    });
     AsyncStorage.getItem('scan_status', (err, result) => {
       if (result!=null){
         scan_status = JSON.parse(result);
@@ -82,6 +77,18 @@ export default class Scan extends Component {
   }
 
   componentWillMount(){
+    AsyncStorage.getItem('name', (err, result) => {     
+      if (result!=null){
+        name = JSON.parse(result) 
+        this.setState({name: name});
+      }
+    });
+    AsyncStorage.getItem('supervisor_name', (err, result) => {     
+      if (result!=null){
+        supervisor_name = JSON.parse(result) 
+        this.setState({supervisor_name: supervisor_name});
+      }
+    });
     this._setStatus();    
   }
 
@@ -152,7 +159,7 @@ export default class Scan extends Component {
     return (
     //<Image style={styles.container} ref={'backgroundImage'} source={require('./images/back.jpg')}>
     //<Subtitle style={{fontSize:10,color: 'white', right: (Platform.OS === 'ios') ? 1 : 0}}></Subtitle>
-      <Container >
+      <Container>
         <Header style={{ backgroundColor:'#de6262',height: (Platform.OS === 'ios') ? 64 : 54}}>
           <Left>
             <Thumbnail small source={require('./images/user1.jpg')}/>
@@ -169,47 +176,32 @@ export default class Scan extends Component {
           </Right>   
           <DropdownAlert ref={(ref) => this.dropdown = ref} updateStatusBar={false}/>       
         </Header>
-
-            <Content contentContainerStyle={{flex: 1,justifyContent: 'center'}}>
-              <StatusBar backgroundColor="#de6262"/>
-            <Card>
-              <CardItem header >
-                <Text style={{color: '#de6262', fontSize: 20, fontWeight: "bold"}}>Appointment Information</Text>
-              </CardItem>
-              <CardItem>
-                <Icon active name="ios-person" />
-                <Text>Supervisor</Text>
-                <Right>
-                  <Text>Shoshana</Text>
-                </Right>
-              </CardItem>
-              <CardItem>
-                <Icon active name="ios-person" />
-                <Text>Patient</Text>
-                <Right>
-                  <Text>Shailesh</Text>
-                </Right>
-              </CardItem>
-              <CardItem>
-                <Icon active name="ios-alarm" />
-                <Text>Appointment Time</Text>
-                <Right>
-                  <Text>13:00 - 15:00</Text>
-                </Right>
-              </CardItem>
-              <CardItem>
-                <Icon active name="ios-timer" />
-                <Text>Status</Text>
-                <Right>
-                  <Text>{this.state.scan_status}</Text>
-                </Right>
-              </CardItem>
-            </Card>
-              <Button  onPress={()=> this._checkTaskStatus()} style={{justifyContent:'center', backgroundColor:'#de6262', marginTop:20,marginBottom:40, alignSelf: 'center',width:120,height:120, borderRadius:60}}>
-                <Text style={{ alignSelf: 'center'}}>{this.state.clock}</Text>
-              </Button>
-            </Content>
-            <Image small  style={{alignSelf: 'center',marginBottom: 10}} source={require('./images/bottom_logoo.png')}/>
+        <Content>
+          <StatusBar backgroundColor="#de6262"/>
+          <Card style={{marginTop: 20}}>
+            <CardItem header>
+              <Text style={{color: '#de6262', fontSize: 20, fontWeight: "bold"}}>Appointment Information</Text>
+            </CardItem>
+            <CardItem style={{borderWidth: 0}}>
+              <Icon active name="ios-person" />
+              <Text>Supervisor</Text>
+              <Right>
+                <Text>{this.state.supervisor_name}</Text>
+              </Right>
+            </CardItem>
+            <CardItem>
+              <Icon active name="ios-timer" />
+              <Text>Status</Text>
+              <Right>
+                <Text>{this.state.scan_status}</Text>
+              </Right>
+            </CardItem>
+          </Card>
+          <Button  onPress={()=> this._checkTaskStatus()} style={{justifyContent:'center', backgroundColor:'#de6262', marginTop:50, marginBottom:30, alignSelf: 'center',width:120,height:120, borderRadius:60}}>
+            <Text style={{ alignSelf: 'center'}}>{this.state.clock}</Text>
+          </Button>
+        </Content>
+        <Image small  style={{alignSelf: 'center',marginBottom: 10}} source={require('./images/bottom_logoo.png')}/>
       </Container>
     //</Image>
     );
