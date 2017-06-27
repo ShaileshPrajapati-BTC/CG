@@ -11,6 +11,8 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.eguma.barcodescanner.BarcodeScannerPackage;
+import com.joshblour.reactnativepermissions.ReactNativePermissionsPackage; // <--- import
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +32,8 @@ public class MainApplication extends Application implements ReactApplication {
             new ReactNativePushNotificationPackage(),
           new RCTCameraPackage(),
           new BarcodeScannerPackage(),
-          new BackgroundTimerPackage()
+          new BackgroundTimerPackage(),
+          new ReactNativePermissionsPackage()
       );
     }
   };

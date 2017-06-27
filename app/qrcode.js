@@ -19,6 +19,7 @@ import Header from './components/back_header.js';
 import Camera from 'react-native-camera';
 import CONFIG from './config/config.js';
 import DropdownAlert from 'react-native-dropdownalert'
+import Permissions from 'react-native-permissions';
 
 export default class Qrcode extends Component {
 
@@ -31,22 +32,25 @@ export default class Qrcode extends Component {
       camera: true,
       appointment_id: '',
       in_out_status: '',
-      loading: true
+      loading: false
     };
   }
 
   componentWillMount () {
     this._getToken();
+    this._checkPermission();
   }
   
   componentDidMount(){
-    // if (this.props.msg!=null){
-    //   this.header._alert(this.props.msg);
-    // }
-    console.log('-fffffffff');
-    console.log(this.props.picker_state);
-    console.log(this.props.extra_milage);
-    console.log(this.props.injury_status);
+  }
+
+  _navigate(name, msg_obj) {
+    this.props.navigator.resetTo({
+      name: name,
+      passProps: {
+        msg: msg_obj
+      }
+    })
   }
 
   async _getToken(){
@@ -158,29 +162,35 @@ export default class Qrcode extends Component {
     } catch(error) {
       this.header._alert({status: 'error', message: CONFIG.something_went_wrong});
     }
-  }  
-
-
-  _navigate(name, msg_obj) {
-    this.props.navigator.resetTo({
-      name: name,
-      passProps: {
-        msg: msg_obj
-      }
-    })
   }
 
-  _alertPopup(title, msg){
-    Alert.alert(
-      title,
-      msg,
-      [
-        {text: 'OK'},
-      ],
-      { cancelable: false }
-    )
+  _openSettings() {
+    Permissions.openSettings()
+    this._navigate('Scan');
   }
 
+  _cancel(){
+    this._navigate('Scan');
+  }
+
+  _checkPermission() {
+    Permissions.getPermissionStatus('camera')
+      .then(response => {
+        if (response != 'authorized'){
+          Alert.alert(
+            'Evv would like to use Your Camera.',
+            "Evv use camera to scan Qr-code, Please enable it from settings.",
+            [
+              {text: 'Cancel', style: 'cancel', onPress: this._cancel.bind(this)},
+              {text: 'Open Settings', onPress: this._openSettings.bind(this) },
+            ]
+          )
+        }else{
+          this.setState({loading: true});
+        }
+    });
+  }
+  
   render() {
     // this.barCodeFlag = true;
       return (
