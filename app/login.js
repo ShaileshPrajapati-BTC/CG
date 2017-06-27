@@ -113,69 +113,31 @@ export default class Login extends Component {
     })
   }
 
-  _alertPopup(title, msg){
-    Alert.alert(
-      title,
-      msg,
-      [
-        {text: 'OK'},
-      ],
-      { cancelable: false }
-    )
-  }
-
   render() {
     return (
-           // <Image style={styles.container} ref={'backgroundImage'} source={require('./images/back.jpg')} >
-              <Container >
-                <Content scrollEnabled={false} contentContainerStyle={{flex: 1,justifyContent: 'center',alignItems: 'center'}}>
-                  <StatusBar backgroundColor="#de6262"/>
-                  <Image square  style={{alignSelf: 'center', width:300, height:60 }} source={require('./images/Logoo.png')}  />
-                  <Form style={{ alignSelf: 'center',marginTop:50, width:300}}>
-                    
-                    <Item style={{borderColor: "#E0E0E0",borderWidth: 1, borderRadius:5,marginBottom:10}} >
-                      <Icon active name='ios-call' style={{fontSize: 30, paddingLeft: 15}}/>
-                      <Input maxLength={10} placeholder='Phone number' placeholderTextColor="#E0E0E0" style={{fontSize: 20}} keyboardType="numeric" autoFocus = {false} onChangeText={(text) => {this.setState({mobile: text})}}/>
-                    </Item>
-                    
-                    <Item style={{borderColor: "#E0E0E0", borderWidth:1, borderRadius:5}} >
-                      <Icon active name='ios-lock' style={{fontSize: 30, paddingLeft: 16}}/>
-                      <Input placeholder='Password' placeholderTextColor="#E0E0E0" style={{fontSize: 20}} secureTextEntry={true} onChangeText={(text) => {this.setState({password: text})}}/>
-                    </Item>
-                    
-                      <Button disabled={this.state.disabled} style={{justifyContent:'center',borderColor:'#de6262', backgroundColor: '#de6262',borderRadius:10, marginTop: 25, marginBottom: 20, marginLeft:15,width:285,borderWidth:1 }} onPress={ () => this._validate() }>
-                        {(this.state.disabled)? <Spinner color='#ffffff'/> : <Text>Sign In</Text>}
-                      </Button>
-                  </Form>
-                </Content>
-              <DropdownAlert ref={(ref) => this.dropdown = ref} updateStatusBar={false}/>
-              </Container>
-            //</Image>
+        <Container >
+          <Content scrollEnabled={false} contentContainerStyle={{flex: 1,justifyContent: 'center',alignItems: 'center'}}>
+            <StatusBar backgroundColor="#de6262"/>
+            <Image square  style={{alignSelf: 'center', width:300, height:60 }} source={require('./images/Logoo.png')}  />
+            <Form style={{ alignSelf: 'center',marginTop:50, width:300}}>
+              
+              <Item style={{borderColor: "#E0E0E0",borderWidth: 1, borderRadius:5,marginBottom:10}} >
+                <Icon active name='ios-call' style={{fontSize: 30, paddingLeft: 15}}/>
+                <Input maxLength={10} placeholder='Phone number' placeholderTextColor="#E0E0E0" style={{fontSize: 20}} keyboardType="numeric" autoFocus = {false} onChangeText={(text) => {this.setState({mobile: text})}}/>
+              </Item>
+              
+              <Item style={{borderColor: "#E0E0E0", borderWidth:1, borderRadius:5}} >
+                <Icon active name='ios-lock' style={{fontSize: 30, paddingLeft: 16}}/>
+                <Input placeholder='Password' placeholderTextColor="#E0E0E0" style={{fontSize: 20}} secureTextEntry={true} onChangeText={(text) => {this.setState({password: text})}}/>
+              </Item>
+              
+                <Button disabled={this.state.disabled} style={{justifyContent:'center',borderColor:'#de6262', backgroundColor: '#de6262',borderRadius:10, marginTop: 25, marginBottom: 20, marginLeft:15,width:285,borderWidth:1 }} onPress={ () => this._validate() }>
+                  {(this.state.disabled)? <Spinner color='#ffffff'/> : <Text>Sign In</Text>}
+                </Button>
+            </Form>
+          </Content>
+          <DropdownAlert ref={(ref) => this.dropdown = ref} updateStatusBar={false}/>
+        </Container>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    resizeMode: 'cover',
-    width: null,
-    height: null,
-  },
-  welcome: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    margin: 10,
-    color: '#FFFFFF',
-  },
-  blurView: {
-    position: "absolute",
-    left: 0,
-    top: 0,
-    bottom: 0,
-    right: 0
-  }
-});

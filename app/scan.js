@@ -194,8 +194,6 @@ export default class Scan extends Component {
   
   render() {
     return (
-    //<Image style={styles.container} ref={'backgroundImage'} source={require('./images/back.jpg')}>
-    //<Subtitle style={{fontSize:10,color: 'white', right: (Platform.OS === 'ios') ? 1 : 0}}></Subtitle>
       <Container>
         <Header style={{ backgroundColor:'#de6262',height: (Platform.OS === 'ios') ? 64 : 54}}>
           <Left>
@@ -217,7 +215,7 @@ export default class Scan extends Component {
         {(this.state.loading)? 
           <Content scrollEnabled={false}>
             <Card style={{marginTop: 20}}>
-              <List>
+              <List style={{borderLeftWidth: 3, borderLeftColor: '#de6262'}}>
                 <ListItem itemDivider>
                   <Text style={{color: '#de6262', fontSize: 15, fontWeight: "bold"}}>Appointment Information</Text>
                 </ListItem> 
@@ -252,31 +250,6 @@ export default class Scan extends Component {
           : <Loading/>}
         <Image small  style={{alignSelf: 'center',marginBottom: 10}} source={require('./images/bottom_logoo.png')}/>
       </Container>
-    //</Image>
     );
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    resizeMode: 'cover',
-    width: null,
-    height: null,
-  },
-  welcome: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    margin: 10,
-    color: '#FFFFFF',
-  },
-  blurView: {
-    position: "absolute",
-    left: 0,
-    top: 0,
-    bottom: 0,
-    right: 0
-  }
-});

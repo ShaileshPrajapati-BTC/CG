@@ -45,7 +45,6 @@ export default class Splash extends Component {
 
   render() {
     return (
-      //<Image style={styles.container} ref={'backgroundImage'} source={require('./images/back.jpg')}>
         <Container>
             <Content contentContainerStyle={{flex: 1,justifyContent: 'center',alignItems: 'center'}}>
               <StatusBar backgroundColor="#de6262"/>
@@ -53,31 +52,6 @@ export default class Splash extends Component {
               <Spinner color='#de6262'/>            
           </Content>
         </Container>
-      //</Image>
     );
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    resizeMode: 'cover',
-    width: null,
-    height: null,
-  },
-  welcome: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    margin: 10,
-    color: '#FFFFFF',
-  },
-  blurView: {
-    position: "absolute",
-    left: 0,
-    top: 0,
-    bottom: 0,
-    right: 0
-  }
-});
