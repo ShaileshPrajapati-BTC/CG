@@ -20,6 +20,7 @@ import Camera from 'react-native-camera';
 import CONFIG from './config/config.js';
 import DropdownAlert from 'react-native-dropdownalert'
 import Permissions from 'react-native-permissions';
+import Loading from './components/Loading.js';
 
 export default class Qrcode extends Component {
 
@@ -215,7 +216,7 @@ export default class Qrcode extends Component {
                     </View>
                   </Camera>
                 </Content>
-               :<Content contentContainerStyle={{flex: 1, justifyContent: 'center',alignItems: 'center'}}><Spinner color='#de6262'/><Text style={{color: '#de6262'}}>Please wait...</Text></Content>}
+               : <Loading/>}
         </Container>
       );
   }

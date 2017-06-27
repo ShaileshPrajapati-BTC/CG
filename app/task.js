@@ -28,6 +28,7 @@ import {Image,
 
 import CONFIG from './config/config.js';
 import Header from './components/back_header.js';   
+import Loading from './components/Loading.js';
 
 export default class Task extends Component {
 
@@ -156,7 +157,7 @@ export default class Task extends Component {
               picker_state['todo_id-'+val] = picker_state['todo_id-'+val] || "status-no";
               sub.push(
                 <CardItem >
-                  <Text>{data[key][val]}</Text>
+                  <Text style={{fontSize: 15}}>{data[key][val]}</Text>
                   <Right>
                     <Picker
                       supportedOrientations={['portrait','landscape']}
@@ -178,7 +179,7 @@ export default class Task extends Component {
           task.push(
             <Card style={{borderBottomWidth:5}} bordered={true}>
               <CardItem header >
-                <Text style={{color: '#de6262', fontSize: 20, fontWeight: "bold"}}>{key}</Text>
+                <Text style={{color: '#de6262', fontSize: 15, fontWeight: "bold"}}>{key}</Text>
               </CardItem>
               {sub}
             </Card>
@@ -189,7 +190,7 @@ export default class Task extends Component {
       task.push(
       <Card>
         <CardItem header >
-          <Text style={{color: '#de6262', fontSize: 20, fontWeight: "bold"}}>Extra Activity</Text>
+          <Text style={{color: '#de6262', fontSize: 15, fontWeight: "bold"}}>Extra Activity</Text>
         </CardItem>
         <CardItem>
           <Form>
@@ -209,7 +210,7 @@ export default class Task extends Component {
       <Container>
         <Header navigator={this.props.navigator} emergency_icon={true} ref={(header) => { this.header = header; }}/>
         <StatusBar backgroundColor="#de6262" />
-        {(this.state.loading)? <Content contentContainerStyle={{flex: 1, justifyContent: 'center',alignItems: 'center'}}><Spinner color='#de6262'/><Text style={{color: '#de6262'}}>Please wait...</Text></Content> : 
+        {(this.state.loading)? <Loading/> : 
           <Content >
             {task}
           </Content>

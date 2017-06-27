@@ -70,7 +70,7 @@ export default class Login extends Component {
         password: this.state.password,
       })
     }).catch(function(error) {
-      Alert.alert("Error", "Something went wrong please try again later!!");
+      this.dropdown.alertWithType('error', 'Error', CONFIG.something_went_wrong);
       $this.setState({disabled: false});
     });
     try {
@@ -91,16 +91,13 @@ export default class Login extends Component {
         // PushNotification.localNotification ({
         //   message: "Dont Forget to enable Geo location.."
         // });
-        // this._alertPopup('Success', res.message);
         this._navigate('Scan',{status: 'success', message: res.message});
       }
       else{
         this.setState({disabled: false});
-        // this._alertPopup('Error', res.message);
         this.dropdown.alertWithType('error', 'Error', res.message);
       }
     } catch(error) {
-      // this._alertPopup('Error', "Something went wrong please try again later!!")
       this.dropdown.alertWithType('error', 'Error', CONFIG.something_went_wrong);
       this.setState({disabled: false});
       console.log(error);

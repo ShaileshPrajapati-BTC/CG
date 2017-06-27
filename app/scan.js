@@ -21,6 +21,8 @@ import {Image,
 import geolib from 'geolib';
 import BackgroundTimer from 'react-native-background-timer';
 import DropdownAlert from 'react-native-dropdownalert';
+import CONFIG from './config/config.js';
+import Loading from './components/Loading.js';
 
 const EventEmitter = Platform.select({
   ios: () => NativeAppEventEmitter,
@@ -37,7 +39,9 @@ export default class Scan extends Component {
       longitude: '',
       clock: 'Clock in',
       in_out_status: 'In',
-      supervisor_name: ''
+      supervisor_name: '',
+      token: '',
+      loading: true
     };
   }
   
@@ -89,6 +93,12 @@ export default class Scan extends Component {
         this.setState({supervisor_name: supervisor_name});
       }
     });
+    AsyncStorage.getItem('token', (err, result) => {
+       token= JSON.parse(result)
+       if (result!=null){
+          this.setState({token: token});
+       }
+     });
     this._setStatus();    
   }
 
@@ -148,11 +158,38 @@ export default class Scan extends Component {
     })
   }
   
-  _logout(){
+  async _logout(){
+
+    this.setState({loading: false});
     BackgroundTimer.stop();
-    AsyncStorage.multiRemove(['token','scan_status', 'clock_status', 'appointment_id', 'client_id', 'location','in_out_status'], (err, result) => {
-      this._navigate('Splash','');
+    
+    let response = await fetch(CONFIG.BASE_URL+'cargiver/logout', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'access_token': this.state.token
+      }
+    }).catch(function(error) {
+      this.dropdown.alertWithType('error', 'Error', CONFIG.something_went_wrong);
     });
+    try {
+      let res = await response.json();
+      console.log(res);
+      if (res.status)
+      {
+        AsyncStorage.multiRemove(['token','scan_status', 'clock_status', 'appointment_id', 'client_id', 'location','in_out_status'], (err, result) => {
+          this._navigate('Splash','');
+        });
+      }
+      else{
+        this.dropdown.alertWithType('error', 'Error', res.message);
+        this.setState({loading: true});
+      }
+    } catch(error) {
+      this.dropdown.alertWithType('error', 'Error', CONFIG.something_went_wrong);
+      this.setState({loading: true});
+    }
   }
   
   render() {
@@ -176,42 +213,43 @@ export default class Scan extends Component {
           </Right>   
           <DropdownAlert ref={(ref) => this.dropdown = ref} updateStatusBar={false}/>       
         </Header>
-        <Content scrollEnabled={false}>
-          <StatusBar backgroundColor="#de6262"/>
-         
-          <Card style={{marginTop: 20}}>
-            <List>
-              <ListItem itemDivider>
-                <Text style={{color: '#de6262', fontSize: 15, fontWeight: "bold"}}>Appointment Information</Text>
-              </ListItem> 
-              <ListItem icon>
-                <Left>
-                  <Icon name="ios-person" />
-                </Left>
-                <Body>
-                  <Text>Supervisor</Text>
-                </Body>
-                <Right>
-                  <Text>{this.state.supervisor_name}</Text>
-                </Right>
-              </ListItem>
-              <ListItem icon>
-                <Left>
-                  <Icon name="ios-timer" />
-                </Left>
-                <Body>
-                  <Text>Status</Text>
-                </Body>
-                <Right>
-                  <Text>{this.state.scan_status}</Text>
-                </Right>
-              </ListItem>
-            </List>
-          </Card>
-          <Button  onPress={()=> this._checkTaskStatus()} style={{justifyContent:'center', backgroundColor:'#de6262', marginTop:50, marginBottom:30, alignSelf: 'center',width:120,height:120, borderRadius:60}}>
-            <Text style={{ alignSelf: 'center', fontSize: 15}}>{this.state.clock.toUpperCase()}</Text>
-          </Button>
-        </Content>
+        <StatusBar backgroundColor="#de6262"/>
+        {(this.state.loading)? 
+          <Content scrollEnabled={false}>
+            <Card style={{marginTop: 20}}>
+              <List>
+                <ListItem itemDivider>
+                  <Text style={{color: '#de6262', fontSize: 15, fontWeight: "bold"}}>Appointment Information</Text>
+                </ListItem> 
+                <ListItem icon>
+                  <Left>
+                    <Icon name="ios-person" />
+                  </Left>
+                  <Body>
+                    <Text style={{fontSize: 15}}>Supervisor</Text>
+                  </Body>
+                  <Right>
+                    <Text style={{fontSize: 15}}>{this.state.supervisor_name}</Text>
+                  </Right>
+                </ListItem>
+                <ListItem icon>
+                  <Left>
+                    <Icon name="ios-timer" />
+                  </Left>
+                  <Body>
+                    <Text style={{fontSize: 15}}>Status</Text>
+                  </Body>
+                  <Right>
+                    <Text style={{fontSize: 15}}>{this.state.scan_status}</Text>
+                  </Right>
+                </ListItem>
+              </List>
+            </Card>
+            <Button  onPress={()=> this._checkTaskStatus()} style={{justifyContent:'center', backgroundColor:'#de6262', marginTop:50, marginBottom:30, alignSelf: 'center',width:120,height:120, borderRadius:60}}>
+              <Text style={{ alignSelf: 'center', fontSize: 15}}>{this.state.clock.toUpperCase()}</Text>
+            </Button>
+          </Content>
+          : <Loading/>}
         <Image small  style={{alignSelf: 'center',marginBottom: 10}} source={require('./images/bottom_logoo.png')}/>
       </Container>
     //</Image>
