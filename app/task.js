@@ -195,11 +195,11 @@ export default class Task extends Component {
           <Form>
             <Item stackedLabel style={{marginRight: 25}}>
               <Label >Do you have any reimbursable Milage to enter?</Label>
-              <Input multiline={true}  onChangeText={(text) => {this.setState({extra_milage: text})}}/>
+              <Input multiline={true} maxLength={100} onChangeText={(text) => {this.setState({extra_milage: text})}}/>
             </Item>
             <Item stackedLabel style={{marginRight: 25}}>
               <Label> Any injuries to Client or to yourself?</Label>
-              <Input multiline = {true}  onChangeText={(text) => {this.setState({injury_status: text})}}/>
+              <Input multiline = {true} maxLength={100} onChangeText={(text) => {this.setState({injury_status: text})}}/>
             </Item>
           </Form>
         </CardItem>

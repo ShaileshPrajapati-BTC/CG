@@ -164,17 +164,9 @@ export default class Qrcode extends Component {
     }
   }
 
-  _openSettings() {
-    Permissions.openSettings()
-    this._navigate('Scan');
-  }
-
-  _cancel(){
-    this._navigate('Scan');
-  }
-
-  _checkPermission() {
-    Permissions.getPermissionStatus('camera')
+  _requestForPermissions() {
+    
+    Permissions.requestPermission('camera')
       .then(response => {
         if (response != 'authorized'){
           Alert.alert(
@@ -185,6 +177,24 @@ export default class Qrcode extends Component {
               {text: 'Open Settings', onPress: this._openSettings.bind(this) },
             ]
           )
+        }
+    });
+  }
+
+  _openSettings(){
+    Permissions.openSettings()
+    this._navigate('Scan');
+  } 
+  
+  _cancel(){
+    this._navigate('Scan');
+  }
+
+  _checkPermission() {
+    Permissions.getPermissionStatus('camera')
+      .then(response => {
+        if (response != 'authorized'){
+            this._requestForPermissions();
         }else{
           this.setState({loading: true});
         }

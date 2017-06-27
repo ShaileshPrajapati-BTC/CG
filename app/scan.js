@@ -5,7 +5,7 @@ import {
   Text,
   Button,Icon,Badge,
   Header,Left,Body,Title,Right,Subtitle,Card, CardItem,
-  Thumbnail,Spinner
+  Thumbnail,Spinner,List, ListItem
 } from 'native-base';
 
 import {Image,
@@ -178,27 +178,38 @@ export default class Scan extends Component {
         </Header>
         <Content scrollEnabled={false}>
           <StatusBar backgroundColor="#de6262"/>
+         
           <Card style={{marginTop: 20}}>
-            <CardItem header>
-              <Text style={{color: '#de6262', fontSize: 20, fontWeight: "bold"}}>Appointment Information</Text>
-            </CardItem>
-            <CardItem style={{borderWidth: 0}}>
-              <Icon active name="ios-person" />
-              <Text>Supervisor</Text>
-              <Right>
-                <Text>{this.state.supervisor_name}</Text>
-              </Right>
-            </CardItem>
-            <CardItem>
-              <Icon active name="ios-timer" />
-              <Text>Status</Text>
-              <Right>
-                <Text>{this.state.scan_status}</Text>
-              </Right>
-            </CardItem>
+            <List>
+              <ListItem itemDivider>
+                <Text style={{color: '#de6262', fontSize: 15, fontWeight: "bold"}}>Appointment Information</Text>
+              </ListItem> 
+              <ListItem icon>
+                <Left>
+                  <Icon name="ios-person" />
+                </Left>
+                <Body>
+                  <Text>Supervisor</Text>
+                </Body>
+                <Right>
+                  <Text>{this.state.supervisor_name}</Text>
+                </Right>
+              </ListItem>
+              <ListItem icon>
+                <Left>
+                  <Icon name="ios-timer" />
+                </Left>
+                <Body>
+                  <Text>Status</Text>
+                </Body>
+                <Right>
+                  <Text>{this.state.scan_status}</Text>
+                </Right>
+              </ListItem>
+            </List>
           </Card>
           <Button  onPress={()=> this._checkTaskStatus()} style={{justifyContent:'center', backgroundColor:'#de6262', marginTop:50, marginBottom:30, alignSelf: 'center',width:120,height:120, borderRadius:60}}>
-            <Text style={{ alignSelf: 'center'}}>{this.state.clock.toUpperCase()}</Text>
+            <Text style={{ alignSelf: 'center', fontSize: 15}}>{this.state.clock.toUpperCase()}</Text>
           </Button>
         </Content>
         <Image small  style={{alignSelf: 'center',marginBottom: 10}} source={require('./images/bottom_logoo.png')}/>
