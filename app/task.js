@@ -42,7 +42,10 @@ export default class Task extends Component {
       disabled: false,
       loading: true,
       extra_milage: '',
-      injury_status: ''
+      injury_status: '',
+      extra_milage_height: 20,
+      injury_status_height: 20
+
     };
   }
 
@@ -196,18 +199,24 @@ export default class Task extends Component {
           <Form>
             <Item stackedLabel style={{marginRight: 25}}>
               <Label >Do you have any reimbursable Milage to enter?</Label>
-              <Input multiline={true} maxLength={100} onChangeText={(text) => {this.setState({extra_milage: text})}}/>
+              <Input multiline={true} maxLength={100}
+                     style = {{height : Math.max(35, this.state.extra_milage_height)}}
+                    onChange={(event) => {this.setState({extra_milage: event.nativeEvent.text, extra_milage_height: event.nativeEvent.contentSize.height})}}
+              />
             </Item>
             <Item stackedLabel style={{marginRight: 25}}>
               <Label> Any injuries to Client or to yourself?</Label>
-              <Input multiline = {true} maxLength={100} onChangeText={(text) => {this.setState({injury_status: text})}}/>
+              <Input multiline = {true} maxLength={100} 
+                     style = {{height : Math.max(35, this.state.injury_status_height)}}
+                     onChange={(event) => {this.setState({injury_status: event.nativeEvent.text, injury_status_height: event.nativeEvent.contentSize.height})}}
+              />
             </Item>
           </Form>
         </CardItem>
       </Card>
     )
     return (
-      <Container>
+      <Container scrollEnabled={false}>
         <Header navigator={this.props.navigator} emergency_icon={true} ref={(header) => { this.header = header; }}/>
         <StatusBar backgroundColor="#de6262" />
         {(this.state.loading)? <Loading/> : 
