@@ -13,7 +13,8 @@ import {View,
   Dimensions,
   StatusBar,
   Alert,
-  Platform
+  Platform,
+  Vibration
   } from 'react-native';
 import Header from './components/back_header.js';   
 import Camera from 'react-native-camera';
@@ -67,6 +68,7 @@ export default class Qrcode extends Component {
   async _scan_in_and_out_request(qr_data){
     qr_data = JSON.parse(qr_data);
     console.log(qr_data);
+    Vibration.vibrate([0, 500, 200, 500]);
     let response = await fetch(CONFIG.BASE_URL+'qrcode/scan', {
       method: 'POST',
       headers: {
@@ -86,7 +88,6 @@ export default class Qrcode extends Component {
       let result = await response.json();
       console.log(result);
       if (result.status){
-
         this.setState({
           appointment_id: JSON.stringify(result.data.appointment),
           in_out_status: JSON.stringify(result.data.in_out_status)
