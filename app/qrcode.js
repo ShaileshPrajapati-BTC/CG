@@ -66,58 +66,62 @@ export default class Qrcode extends Component {
   }
 
   async _scan_in_and_out_request(qr_data){
-    qr_data = JSON.parse(qr_data);
-    console.log(qr_data);
     Vibration.vibrate([0, 500, 200, 500]);
-    let response = await fetch(CONFIG.BASE_URL+'qrcode/scan', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'access_token': this.state.token
-      },
-      body: JSON.stringify(
-      {
-        client_id: qr_data.client_id,
-      })
-    }).catch(function(error) {
-      $this.header._alert({status: 'error', message: CONFIG.something_went_wrong});
-    });;
-
     try {
-      let result = await response.json();
-      console.log(result);
-      if (result.status){
-        this.setState({
-          appointment_id: JSON.stringify(result.data.appointment),
-          in_out_status: JSON.stringify(result.data.in_out_status)
-        });
-        
-        AsyncStorage.setItem("client_id", JSON.stringify(qr_data.client_id));
-        AsyncStorage.setItem("location", JSON.stringify(qr_data.location));
-        AsyncStorage.setItem("scan_status", JSON.stringify(result.data.scan_status));
-        AsyncStorage.setItem("clock_status", JSON.stringify(result.data.clock_status));
-        AsyncStorage.setItem("in_out_status", JSON.stringify(result.data.in_out_status));
-        AsyncStorage.setItem("appointment_id", JSON.stringify(result.data.appointment));
+      qr_data = JSON.parse(qr_data);
+      if (qr_data.client_id == 'undefined'){
+        throw "Invalid qr code"
+      }else{
+        console.log(qr_data);
+        let response = await fetch(CONFIG.BASE_URL+'qrcode/scan', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'access_token': this.state.token
+          },
+          body: JSON.stringify(
+          {
+            client_id: qr_data.client_id,
+          })
+        }).catch(function(error) {
+          $this.header._alert({status: 'error', message: CONFIG.something_went_wrong});
+        });;
 
-        console.log(JSON.stringify(result.data.in_out_status)+'-------------out>');
+        let result = await response.json();
+        console.log(result);
+        if (result.status){
+          this.setState({
+            appointment_id: JSON.stringify(result.data.appointment),
+            in_out_status: JSON.stringify(result.data.in_out_status)
+          });
+          
+          AsyncStorage.setItem("client_id", JSON.stringify(qr_data.client_id));
+          AsyncStorage.setItem("location", JSON.stringify(qr_data.location));
+          AsyncStorage.setItem("scan_status", JSON.stringify(result.data.scan_status));
+          AsyncStorage.setItem("clock_status", JSON.stringify(result.data.clock_status));
+          AsyncStorage.setItem("in_out_status", JSON.stringify(result.data.in_out_status));
+          AsyncStorage.setItem("appointment_id", JSON.stringify(result.data.appointment));
 
-        if (result.data.in_out_status == "In"){
-          console.log(this.state.in_out_status+'------------->');
-          this.header._alert({status: 'success', message: result.message});
-          this._sendTodoList();
-        }else{
-          console.log(this.state.in_out_status+'-------------ddd>');
-          this._navigate('Scan',{status: 'success', message: result.message});
+          console.log(JSON.stringify(result.data.in_out_status)+'-------------out>');
+
+          if (result.data.in_out_status == "In"){
+            console.log(this.state.in_out_status+'------------->');
+            this.header._alert({status: 'success', message: result.message});
+            this._sendTodoList();
+          }else{
+            console.log(this.state.in_out_status+'-------------ddd>');
+            this._navigate('Scan',{status: 'success', message: result.message});
+          }
         }
-      }
-      else{
-        this._navigate('Scan', {status: 'error', message: result.message});
+        else{
+          this._navigate('Scan', {status: 'error', message: result.message});
+        }
       }
       this.setState({loading: false});
     }catch(error) {
-      this.header._alert({status: 'error', message: CONFIG.something_went_wrong});
-      console.log(error);
+      this.header._alert({status: 'error', message: CONFIG.invalid_qr_code});
+      this.setState({camera: true});
     }
   }
 

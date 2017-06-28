@@ -4,5 +4,6 @@ module.exports = {
   something_went_wrong: 'Something went wrong please try again later!!',
   mobile: 'Please enter your mobile number',
   password: 'Please enter your password',
-  invalid_mobile: 'Please enter valid mobile number'
+  invalid_mobile: 'Please enter valid mobile number',
+  invalid_qr_code: 'Invalid Qr code.'
 };
