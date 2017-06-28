@@ -179,6 +179,10 @@ export default class Qrcode extends Component {
               {text: 'Open Settings', onPress: this._openSettings.bind(this) },
             ]
           )
+        }else{
+          if (response == 'authorized'){
+            this.setState({loading: true});
+          }
         }
     });
   }
